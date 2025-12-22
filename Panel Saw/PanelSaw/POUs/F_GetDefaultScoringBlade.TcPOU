@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="F_GetDefaultScoringBlade" Id="{63204ffb-2f62-4675-ab5e-2b993132ac0c}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION F_GetDefaultScoringBlade : ST_SawBladeData
+VAR_INPUT
+END_VAR
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[F_GetDefaultScoringBlade.rBladeDiameter := 120.0;
+F_GetDefaultScoringBlade.rBladeRadius := F_GetDefaultScoringBlade.rBladeDiameter / 2;
+F_GetDefaultScoringBlade.rBladeThickness := 2.8;
+F_GetDefaultScoringBlade.sBladeType := 'KWO split scoring saw blade';
+]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

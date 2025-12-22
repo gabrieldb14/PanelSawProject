@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <GVL Name="GVL_Parameters" Id="{b1ea3988-2b40-4799-95f4-f4b193fd819c}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+VAR_GLOBAL
+	stPanelData : ST_WoodPanelData;
+	stMainBlade : ST_SawBladeData;
+	stScoringBlade : ST_SawBladeData;
+END_VAR]]></Declaration>
+  </GVL>
+</TcPlcObject>

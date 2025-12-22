@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <DUT Name="ST_SawBladeData" Id="{cf847236-e954-45ee-8d69-0dd73122b276}">
+    <Declaration><![CDATA[TYPE ST_SawBladeData :
+STRUCT
+	rBladeDiameter : REAL;
+	rBladeRadius : REAL;
+	rBladeThickness: REAL;
+	sBladeType : STRING;
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

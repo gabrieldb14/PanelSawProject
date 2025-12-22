@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="FB_PressureBeam" Id="{adc92050-bd58-4ebf-a443-d9158cd74fd7}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_PressureBeam
+VAR_INPUT
+	bEnable : BOOL;
+	bLowerCommand : BOOL;
+	bRaiseCommand : BOOL;
+	tLowerTime : TIME := T#2S;
+	tRaiseTime : TIME := T#1S500MS;
+END_VAR
+VAR_OUTPUT
+	bLowered: BOOL;
+	bRaised : BOOL;
+	bMoving : BOOL;
+	bError : BOOL;
+	bActive : BOOL;
+END_VAR
+VAR
+	eState : (IDLE, LOWERING, LOWERED, RAISING, ERROR) := IDLE;
+	tonLower : TON;
+	tonRaise : TON;
+	tonTimeout : TON;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[CASE eState OF
+	IDLE:
+		bMoving := FALSE;
+		bLowered := FALSE;
+		bRaised := TRUE;
+		bActive := FALSE;
+		tonLower(IN := FALSE);
+		tonRaise(IN := FALSE);
+		
+		IF bEnable AND bLowerCommand THEN
+			eSTATE := LOWERING;
+		END_IF
+	LOWERING:
+		bMoving := TRUE;
+		bRaised := FALSE;
+		tonLower(IN := TRUE, PT := tLowerTime);
+		
+		IF tonLower.Q THEN
+			eState := LOWERED;
+			tonLower(IN := FALSE);
+		END_IF
+	LOWERED:
+		bMoving := FALSE;
+		bLowered := TRUE;
+		bActive := TRUE;
+		IF bRaiseCommand OR NOT bEnable THEN
+			eState := RAISING;
+		END_IF
+	RAISING:
+		bMoving := TRUE;
+		bLowered := FALSE;
+		tonRaise(IN := TRUE, PT := tRaiseTime);
+		
+		IF tonRaise.Q THEN
+			eState := IDLE;
+			tonRaise(IN := FALSE);
+		END_IF
+	ERROR:
+		bError := TRUE;
+		bMoving := FALSE;
+		
+		IF NOT bEnable THEN
+			eState := IDLE;
+			bError := FALSE;
+		END_IF		
+END_CASE]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

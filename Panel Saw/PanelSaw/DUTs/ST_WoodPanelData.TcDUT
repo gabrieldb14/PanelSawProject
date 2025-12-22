@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <DUT Name="ST_WoodPanelData" Id="{2c439ee8-7890-4b27-b7b9-984a002cb106}">
+    <Declaration><![CDATA[TYPE ST_WoodPanelData :
+STRUCT
+	rPanelWidth : REAL; // Largura x <- 0 +>
+	rPanelLength : REAL; // Comprimento y
+	rPanelThickness: REAL ; // Espessura z
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="PRG_INIT" Id="{fd41d363-d0b4-4eed-98ac-ffc146248789}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM PRG_INIT
+VAR
+	bProgramInit :BOOL := FALSE;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF NOT bProgramInit THEN
+	GVL_Parameters.stMainBlade := F_GetDefaultMainBlade();
+	GVL_Parameters.stScoringBlade := F_GetDefaultScoringBlade();
+	GVL_Parameters.stPanelData := F_GetDefaultWoodPanel();
+	
+	bProgramInit := TRUE;
+END_IF]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

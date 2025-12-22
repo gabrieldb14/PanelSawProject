@@ -1,0 +1,279 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="PRG_MACHINE" Id="{6414af73-a5a7-4e7b-8dc3-046ab9fb5e46}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM PRG_MACHINE
+VAR	
+	//Machine state
+    nInternState : INT := 0;
+    nSubState : INT := 0;
+    nStateBeforeStop : INT := 0;
+    
+    // Function blocks
+    fbPressureBeam : FB_PressureBeam;
+    fbPusherClamp : FB_PusherClamp;
+    fbSawCut : FB_SawCut; 
+    fbSafety : FB_SafetyHandler;
+    
+    // Control structure
+    stMachineControl : ST_MachineControl;
+    
+    // Cut tracking
+    rCurrentCutPoint : REAL;
+    nCurrentIndex : INT;
+    
+    // Safety timeout
+    tonSafetyTimeout : TON;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[fbSafety(
+	bEmergencyButton := GVL_HMI.bEmergencyButton,
+	bEmergencyResetButton := GVL_HMI.bEmergencyResetButton,
+	bSafetyFencesClosed := GVL_HMI.bSafetyFencesClosed,
+	nCurrentState :=nInternState
+);
+	IF fbSafety.bTriggerEmergency AND nInternState <>999 THEN
+		nInternState := 999;
+		SetSafeState();
+		
+	END_IF
+
+IF GVL_HMI.bEmergencyResetButton THEN
+    GVL_HMI.bEmergencyButton := FALSE;
+    nInternState := 0;
+    GVL_HMI.bEmergencyResetButton := FALSE;
+END_IF
+IF GVL_HMI.bStopCycle AND nInternState <> 4 THEN
+    nStateBeforeStop := nInternState;
+    nInternState := 4;
+    SetSafeState();
+END_IF
+
+fbPressureBeam(
+    bEnable := TRUE,
+    bLowerCommand := stMachineControl.bPressureBeamLower OR GVL_HMI.bPressureBeamCommand,
+    bRaiseCommand := stMachineControl.bPressureBeamRaise OR (NOT GVL_HMI.bPressureBeamCommand)
+);
+
+fbPusherClamp(
+    bEnable := TRUE,
+    bClampCommand := stMachineControl.bClamp OR GVL_HMI.bPusherClampCommand,
+    bUnclampCommand := stMachineControl.bUnclamp OR (NOT GVL_HMI.bPusherClampCommand),
+    rTargetPosition := GVL_HMI.rPusherTargetPosition,
+    rCurrentPosition := GVL_HMI.rPusherFencePosition
+);
+
+GVL_HMI.bPressureBeamActive := fbPressureBeam.bActive;
+GVL_HMI.bPressureBeamLowered := fbPressureBeam.bLowered;
+GVL_HMI.bPressureBeamRaised := fbPressureBeam.bRaised;
+GVL_HMI.bPressureBeamMoving := fbPressureBeam.bMoving;
+
+GVL_HMI.bPusherClampActive := fbPusherClamp.bActive;
+GVL_HMI.bPusherClampMoving := fbPusherClamp.bMoving;
+
+GVL_HMI.nMachineState := nInternState;
+GVL_HMI.nCurrentCutIndex := nCurrentIndex;
+GVL_HMI.sStateDescription := fbSafety.sErrorMessage;
+
+CASE nInternState OF
+    0: StateIdle();
+    1: StatePositioning();
+    2: StateCutting();
+    3: StateReturning();
+    4: StateStopped();
+    10: StateReleasing();
+    999: StateEmergency();
+END_CASE]]></ST>
+    </Implementation>
+    <Action Name="SetSafeState" Id="{19015ad6-1333-465d-9ad7-e1908e627f9d}">
+      <Implementation>
+        <ST><![CDATA[stMachineControl.bPressureBeamRaise := TRUE;
+stMachineControl.bPressureBeamLower := FALSE;
+stMachineControl.bUnclamp := TRUE;
+stMachineControl.bClamp := FALSE;
+GVL_HMI.bScoringSawActive := FALSE;
+GVL_HMI.bMainSawActive := FALSE;
+fbSawCut(bExecute := FALSE, bResetTimer := TRUE);]]></ST>
+      </Implementation>
+    </Action>
+    <Action Name="StateCutting" Id="{31dec3de-acbb-44ce-9fce-bd179b2889a7}">
+      <Implementation>
+        <ST><![CDATA[GVL_HMI.sStateDescription := CONCAT('Cutting ', INT_TO_STRING(nCurrentIndex));
+
+stMachineControl.bPressureBeamLower := TRUE;
+stMachineControl.bPressureBeamRaise := FALSE;
+stMachineControl.bClamp := TRUE;
+stMachineControl.bUnclamp := FALSE;
+
+fbSawCut(
+    bExecute := TRUE,
+    rPanelWidth := GVL_Parameters.stPanelData.rPanelWidth,
+    bResetTimer := FALSE
+);
+
+IF fbSawCut.bBusy THEN
+    GVL_HMI.bScoringSawActive := TRUE;
+    GVL_HMI.bMainSawActive := TRUE;
+END_IF
+
+IF fbSawCut.bError THEN
+    GVL_HMI.sStateDescription := 'Error during cutting operation';
+    SetSafeState();
+    nInternState := 999;
+    nSubState := 0;
+ELSIF fbSawCut.bDone THEN
+    GVL_HMI.bScoringSawActive := FALSE;
+    GVL_HMI.bMainSawActive := FALSE;
+    fbSawCut(bExecute := FALSE);
+    nInternState := 10;
+    nSubState := 0;
+END_IF]]></ST>
+      </Implementation>
+    </Action>
+    <Action Name="StateEmergency" Id="{5274f7f0-b300-4b99-bcce-75616a3f5790}">
+      <Implementation>
+        <ST><![CDATA[GVL_HMI.nMachineState := nInternState;
+GVL_HMI.nCurrentCutIndex := nCurrentIndex;
+
+IF nInternState = 999 THEN
+    GVL_HMI.sStateDescription := fbSafety.sErrorMessage;
+END_IF]]></ST>
+      </Implementation>
+    </Action>
+    <Action Name="StateIdle" Id="{a4a78dfb-7ed6-4944-8055-48ea589d29ff}">
+      <Implementation>
+        <ST><![CDATA[GVL_HMI.sStateDescription := 'Machine Idling.';
+SetSafeState();
+
+nCurrentIndex := 0;
+nSubState := 0;
+
+IF GVL_HMI.bStartCycle THEN
+    GVL_HMI.bStartCycle := FALSE;
+    IF GVL_HMI.nTotalCut > 0 AND GVL_HMI.nTotalCut <= 20 THEN
+        IF fbSafety.bAllowOperation THEN
+            nCurrentIndex := 1;
+            nInternState := 1;
+        ELSE
+            GVL_HMI.sStateDescription := 'ERROR: Safety conditions not met.';
+        END_IF
+    END_IF
+END_IF]]></ST>
+      </Implementation>
+    </Action>
+    <Action Name="StatePositioning" Id="{373b9a3a-d83a-4221-8b92-aa3bc2f2a0b4}">
+      <Implementation>
+        <ST><![CDATA[IF GVL_HMI.nTotalCut < 1 OR GVL_HMI.nTotalCut > 20 THEN
+    GVL_HMI.sStateDescription := 'ERROR: Cut Index out of range';
+    nInternState := 999;
+    RETURN;
+END_IF
+
+rCurrentCutPoint := GVL_HMI.arCutList[nCurrentIndex] + GVL_Parameters.stMainBlade.rBladeThickness / 2;
+GVL_HMI.rPusherTargetPosition := rCurrentCutPoint;
+
+tonSafetyTimeout(IN := TRUE, PT := T#60S);
+IF tonSafetyTimeout.Q THEN
+    GVL_HMI.sStateDescription := 'ERROR: Positioning timeout';
+    nInternState := 999;
+    tonSafetyTimeout(IN := FALSE);
+    RETURN;
+END_IF
+
+CASE nSubState OF
+    0:
+        GVL_HMI.sStateDescription := CONCAT('Positioning for cut ', INT_TO_STRING(nCurrentIndex));
+        
+        stMachineControl.bPressureBeamRaise := TRUE;
+        stMachineControl.bPressureBeamLower := FALSE;
+        stMachineControl.bUnclamp := TRUE;
+        stMachineControl.bClamp := FALSE;
+        
+        IF ABS(GVL_HMI.rPusherFencePosition - rCurrentCutPoint) > 0.1 THEN
+            IF GVL_HMI.rPusherFencePosition < rCurrentCutPoint THEN
+                GVL_HMI.rPusherFencePosition := GVL_HMI.rPusherFencePosition + 0.1;
+            ELSE
+                GVL_HMI.rPusherFencePosition := GVL_HMI.rPusherFencePosition - 0.1;
+            END_IF
+        ELSE
+            nSubState := 1;
+        END_IF
+        
+    1:
+        GVL_HMI.sStateDescription := 'Lowering pressure beam...';
+        stMachineControl.bPressureBeamLower := TRUE;
+        stMachineControl.bPressureBeamRaise := FALSE;
+        
+        IF fbPressureBeam.bLowered THEN
+            nSubState := 2;
+        END_IF
+        
+    2:
+        GVL_HMI.sStateDescription := 'Activating clamp...';
+        stMachineControl.bClamp := TRUE;
+        stMachineControl.bUnclamp := FALSE;
+        
+        IF fbPusherClamp.bActive THEN
+            tonSafetyTimeout(IN := FALSE);
+            nInternState := 2;
+            nSubState := 0;
+        END_IF
+END_CASE]]></ST>
+      </Implementation>
+    </Action>
+    <Action Name="StateReleasing" Id="{a92c69b8-fb0d-4302-a632-8119a3a8f862}">
+      <Implementation>
+        <ST><![CDATA[CASE nSubState OF
+    0: // Raise beam
+        GVL_HMI.sStateDescription := 'Raising pressure beam...';
+        stMachineControl.bPressureBeamRaise := TRUE;
+        stMachineControl.bPressureBeamLower := FALSE;
+        stMachineControl.bClamp := TRUE;
+        
+        IF fbPressureBeam.bRaised THEN
+            nSubState := 1;
+        END_IF
+        
+    1: // Unclamp
+        GVL_HMI.sStateDescription := 'Releasing clamp...';
+        stMachineControl.bUnclamp := TRUE;
+        stMachineControl.bClamp := FALSE;
+        
+        IF fbPusherClamp.bUnclamped THEN
+            nCurrentIndex := nCurrentIndex + 1;
+            
+            IF nCurrentIndex > GVL_HMI.nTotalCut THEN
+                nInternState := 3;
+            ELSE
+                nInternState := 1;
+            END_IF
+            nSubState := 0;
+        END_IF
+END_CASE]]></ST>
+      </Implementation>
+    </Action>
+    <Action Name="StateReturning" Id="{d5afafee-a1b5-4e18-9ae2-96b8d87c5961}">
+      <Implementation>
+        <ST><![CDATA[GVL_HMI.sStateDescription := 'Returning to home position...';
+SetSafeState();
+
+IF GVL_HMI.rPusherFencePosition > 0.0 THEN
+    GVL_HMI.rPusherFencePosition := GVL_HMI.rPusherFencePosition - 0.1;
+ELSE
+    GVL_HMI.rPusherFencePosition := 0.0;
+    GVL_HMI.sStateDescription := 'Cycle complete!';
+    nInternState := 0;
+END_IF]]></ST>
+      </Implementation>
+    </Action>
+    <Action Name="StateStopped" Id="{3a0efc2c-457d-4a23-af66-e1a0d93d0b3e}">
+      <Implementation>
+        <ST><![CDATA[GVL_HMI.sStateDescription := 'Machine stopped.';
+SetSafeState();
+
+IF NOT GVL_HMI.bStopCycle THEN
+    nInternState := nStateBeforeStop;
+END_IF]]></ST>
+      </Implementation>
+    </Action>
+  </POU>
+</TcPlcObject>

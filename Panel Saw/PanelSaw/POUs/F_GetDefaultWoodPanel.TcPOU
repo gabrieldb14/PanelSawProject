@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="F_GetDefaultWoodPanel" Id="{ec0410ba-a39e-467c-8bf4-d774a2f79cd1}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION F_GetDefaultWoodPanel : ST_WoodPanelData
+VAR_INPUT
+END_VAR
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[F_GetDefaultWoodPanel.rPanelWidth := 100.0; // Default width: 100mm
+F_GetDefaultWoodPanel.rPanelLength := 500.0; // Default length: 500mm
+F_GetDefaultWoodPanel.rPanelThickness := 5.0; // Default thickness: 5mm]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

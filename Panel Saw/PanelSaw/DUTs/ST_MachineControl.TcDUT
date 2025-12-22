@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <DUT Name="ST_MachineControl" Id="{daaa6b6a-c926-416c-a476-93c80d455284}">
+    <Declaration><![CDATA[TYPE ST_MachineControl :
+STRUCT
+	bPressureBeamLower : BOOL;
+	bPressureBeamRaise : BOOL;
+	bClamp : BOOL;
+	bUnclamp: BOOL;
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

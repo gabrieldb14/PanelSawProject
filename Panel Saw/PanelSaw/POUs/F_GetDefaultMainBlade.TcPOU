@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="F_GetDefaultMainBlade" Id="{ce87e513-ac8d-49c8-a43a-2c95bf2bc0e3}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION F_GetDefaultMainBlade : ST_SawBladeData
+VAR_INPUT
+END_VAR
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[F_GetDefaultMainBlade.rBladeDiameter := 350.0;
+F_GetDefaultMainBlade.rBladeRadius := F_GetDefaultMainBlade.rBladeDiameter / 2;
+F_GetDefaultMainBlade.rBladeThickness := 3.2;
+F_GetDefaultMainBlade.sBladeType := 'TCT Panel Saw Blade PI-521VS Premium';
+]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

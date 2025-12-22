@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <GVL Name="GVL_HMI" Id="{e4bd0c5a-7c1a-4fb7-a514-fb4d122d85b8}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+VAR_GLOBAL
+	//SAW
+	bMainSawActive : BOOL := FALSE;
+	bScoringSawActive : BOOL := FALSE;
+	rSawCarriagePosition : REAL;
+	
+	//CYCLE COMMAND
+	bStartCycle : BOOL := FALSE;
+	bStopCycle : BOOL := FALSE;
+	
+	nTotalCut : INT;
+	nMachineState : INT;
+	nCurrentCutIndex : INT;
+	sStateDescription : STRING;
+	arCutList : ARRAY[1..20] OF REAL;
+	
+	//TOOLS
+	bPressureBeamActive : BOOL;     
+	bPressureBeamLowered : BOOL;     
+	bPressureBeamRaised : BOOL;    
+	bPressureBeamMoving : BOOL;     
+	bPressureBeamCommand : BOOL;
+	
+	bPusherClampActive : BOOL := FALSE;
+	bPusherClampCommand : BOOL := FALSE;
+	bPusherClampMoving : BOOL := FALSE;
+	rPusherTargetPosition : REAL;
+	rPusherFencePosition : REAL;
+	
+	bAirTablesActive : BOOL := FALSE;
+	//SAFETY
+	bSafetyFencesClosed : BOOL := FALSE;
+	
+	//EMERGENCY
+	bEmergencyButton : BOOL := FALSE;
+	bEmergencyResetButton : BOOL := FALSE;
+END_VAR]]></Declaration>
+  </GVL>
+</TcPlcObject>

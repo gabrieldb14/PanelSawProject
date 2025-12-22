@@ -1,0 +1,72 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="FB_SawCut" Id="{56d1dc31-536e-46b8-8ad0-8a697b1079c8}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_SawCut
+VAR_INPUT
+    bExecute : BOOL;          // Start cut operation
+    rPanelWidth : LREAL;      // Panel width in mm
+    bResetTimer : BOOL;       // Reset timer
+END_VAR
+
+VAR_OUTPUT
+    bDone : BOOL;             // Cut complete
+    bBusy : BOOL;             // Cut in progress
+    bError : BOOL;            // Error occurred
+    tRemainingTime : TIME;    // Time remaining
+END_VAR
+
+VAR
+    tonCutTimer : TON;                  // Timer that counts cut duration
+    tCalculatedCutTime : TIME;          // How long this cut should take
+    rCutTimePerMM : LREAL := 0.05;      // 50ms per mm (adjust for your machine speed)
+    tMinCutTime : TIME := T#2S;         // Never cut less than 2 seconds
+    tMaxCutTime : TIME := T#30S;        // Never cut more than 30 seconds
+    bExecuteOld : BOOL := FALSE;        // Previous value of bExecute
+    nState : INT := 0;                  // 0=IDLE, 10=CUTTING, 20=DONE
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[CASE nState OF
+    0: // IDLE
+        bDone := FALSE;
+        bBusy := FALSE;
+        
+        IF bExecute AND NOT bExecuteOld THEN
+            tCalculatedCutTime := LREAL_TO_TIME(rPanelWidth * rCutTimePerMM * 1000.0);
+            IF tCalculatedCutTime < tMinCutTime THEN
+                tCalculatedCutTime := tMinCutTime;
+            ELSIF tCalculatedCutTime > tMaxCutTime THEN
+                tCalculatedCutTime := tMaxCutTime;
+            END_IF
+            
+            nState := 10;
+        END_IF
+        
+    10: // CUTTING
+        bBusy := TRUE;
+        tonCutTimer(IN := TRUE, PT := tCalculatedCutTime);
+        tRemainingTime := tCalculatedCutTime - tonCutTimer.ET;
+        
+        IF tonCutTimer.Q THEN
+			tonCutTimer(IN := FALSE);
+            nState := 20;
+        END_IF
+        
+        IF NOT bExecute OR bResetTimer THEN
+			tonCutTimer(IN := FALSE);
+            nState := 0;
+        END_IF
+        
+    20: // DONE
+        bDone := TRUE;
+        bBusy := FALSE;
+        tonCutTimer(IN := FALSE);
+        
+        IF NOT bExecute THEN
+            nState := 0;
+        END_IF
+        
+END_CASE
+bExecuteOld := bExecute;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

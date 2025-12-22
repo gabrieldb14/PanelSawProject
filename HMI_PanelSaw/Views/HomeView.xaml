@@ -1,0 +1,169 @@
+﻿<UserControl x:Class="HMI_PanelSaw.Views.HomeView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:HMI_PanelSaw.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="1080" d:DesignWidth="1920">
+    <Grid Margin ="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Text="Main Menu " FontSize="32" FontWeight="Bold" Foreground="#333" Margin="0,0,20,0" HorizontalAlignment="Right"/>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <!--Left Side-->
+            <Border Grid.Column="0"  BorderBrush="#555" BorderThickness="2" Background="#b6b6b6" Margin="10" CornerRadius="5">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <!--Machine Status-->
+                    <Grid Grid.Row="0" Grid.Column="0" Margin="10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="200"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Text="Machine Status" FontSize="24" FontWeight="Bold" Foreground="#333" Margin="10,10,0,10"/>
+                        <TextBlock Grid.Row="1" Grid.Column="0" Text="Total Cuts: " FontSize="20" VerticalAlignment="Center" Margin="5"/>
+                        <Label x:Name="lblTotalCut" Grid.Row="1" Grid.Column="1" Content="0" FontSize="20" FontWeight="Bold" VerticalContentAlignment="Center"/>
+                        <TextBlock Grid.Row="2" Grid.Column="0" Text="Current Cut Index: " FontSize="20" VerticalAlignment="Center" Margin="5"/>
+                        <TextBlock x:Name="txtCurrentCut" Grid.Row="2" Grid.Column="1" Text="0" FontSize="20" FontWeight="Bold" VerticalAlignment="Center"/>
+
+                        <TextBlock Grid.Row="3" Grid.Column="0" Text="Safety Fences: " FontSize="20" VerticalAlignment="Center" Margin="5"/>
+                        <Label x:Name="lblSafetyFence" Grid.Row="3" Grid.Column="1" Content="0" FontSize="20" FontWeight="Bold" VerticalContentAlignment="Center"/>
+
+                        <TextBlock Grid.Row="4" Grid.Column="0" Text="Pusher Clamp: " FontSize="20" VerticalAlignment="Center" Margin="5"/>
+                        <Label x:Name="lblPusherClamp" Grid.Row="4" Grid.Column="1" Content="0" FontSize="20" FontWeight="Bold" VerticalContentAlignment="Center"/>
+
+                        <TextBlock Grid.Row="5" Grid.Column="0" Text="Pusher position: " FontSize="20" VerticalAlignment="Center" Margin="5"/>
+                        <Label x:Name="lblPusherPosition" Grid.Row="5" Grid.Column="1" Content="0" FontSize="20" FontWeight="Bold" VerticalContentAlignment="Center"/>
+                    </Grid>
+                    <!--Saw Status-->
+                    <Grid Grid.Row="0" Grid.Column="1" Margin="10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Column="0" Grid.Row="0" Text="Saw Status" FontSize="24" FontWeight="Bold" Foreground="#333" Margin="10"/>
+                        <TextBlock Grid.Row="1" Grid.Column="0" Text="Main Blade:" FontSize="20"/>
+                        <TextBlock x:Name="txtMainSawStatus" Grid.Row="1" Grid.Column="1" Text="" FontSize="20"/>
+                        
+                        <TextBlock Grid.Row="2" Grid.Column="0" Text="Scoring Blade:" FontSize="20"/>
+                        <TextBlock x:Name="txtScoringSawStatus" Grid.Row="2" Grid.Column="1" Text="" FontSize="20"/>
+                    </Grid>
+                </Grid>
+
+            </Border>
+            <!--Right Side-->
+            <Border Grid.Column="1" BorderBrush="#555" BorderThickness="2" Background="#b6b6b6" Margin="10" CornerRadius="5">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <!--Cut List DGV-->
+                    <Grid Grid.Column="0" Margin="20,10,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="324" Width="430">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="91*"/>
+                            <ColumnDefinition Width="51*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Grid.Row="0" Text="Cut List (Max 20 cuts)" FontSize="24" FontWeight="Bold" Foreground="#333" Margin="0,0,0,10" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+
+                        <DataGrid x:Name="dgCutList" Grid.Column="0" Grid.Row="1" 
+                       AutoGenerateColumns="False" 
+                       CanUserAddRows="True" 
+                       CanUserDeleteRows="True"
+                       FontSize="16"
+                       AlternatingRowBackground="#F0F0F0"
+                       HeadersVisibility="Column"
+                       Margin="0,10,0,10">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Length (mm)" Binding="{Binding CutLength, StringFormat=F2}" Width="150"/>
+                                <DataGridTextColumn Header="Repetitions" Binding="{Binding Repetitions}" Width="100"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Center" Margin="0,10,0,0" Width="130">
+                            <Button x:Name="btnAddCut" Content="Load from file" 
+                         Width="120" Height="50" FontSize="16" FontWeight="Bold" 
+                         Background="#D9D9D9" Foreground="#333" Margin="5" 
+                         Click="BtnLoadFile_Click"/>
+                            <Button x:Name="btnRemoveCut" Content="Remove Cut" 
+                         Width="120" Height="50" FontSize="16" FontWeight="Bold" 
+                         Background="#D9D9D9" Foreground="#333" Margin="5" 
+                        Click="BtnRemoveCut_Click"/>
+                            <Button x:Name="btnClearAllCuts" Content="Clear All" 
+                         Width="120" Height="50" FontSize="16" FontWeight="Bold" 
+                         Background="#D9D9D9" Foreground="#333" Margin="5" 
+                         Click="BtnClearAllCuts_Click"/>
+                            <Button x:Name="btnSaveCuts" Content="Save to PLC" 
+                         Width="120" Height="50" FontSize="16" FontWeight="Bold" 
+                         Background="Red" Foreground="White" Margin="5" 
+                         Click="BtnSaveCuts_Click"/>
+                        </StackPanel>
+                    </Grid>
+                    <Grid Grid.Column="1" Margin="0,10,0,0">
+                        <TextBlock Grid.Row="0" Grid.Column="0" Text="Wood Panel Parameters" FontSize="24" FontWeight="Bold" Foreground="#333" Margin="0,0,0,10"/>
+                        <Grid Margin="0,36,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Grid.Column="0" Grid.Row="0" Text="Panel Width(mm):" FontSize="20"/>
+                            <TextBlock Grid.Column="0" Grid.Row="1" Text="Panel Length(mm):" FontSize="20"/>
+                            <TextBlock Grid.Column="0" Grid.Row="2" Text="Panel Thickness(mm):" FontSize="20"/>
+                            <TextBlock x:Name="txtPanelWidth" Grid.Column="1" Grid.Row="0" Text="" FontSize="20"/>
+                            <TextBlock x:Name="txtPanelLength" Grid.Column="1" Grid.Row="1" Text="" FontSize="20"/>
+                            <TextBlock x:Name="txtPanelThickness" Grid.Column="1" Grid.Row="2" Text="" FontSize="20"/>
+
+                        </Grid>
+                    </Grid>
+
+                </Grid>
+            </Border>
+        </Grid>
+    </Grid>
+</UserControl>

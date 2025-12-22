@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="FB_SafetyHandler" Id="{fe3d9f2e-d8f8-4324-9659-cd829a387b3a}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_SafetyHandler
+VAR_INPUT
+	bEmergencyButton : BOOL;
+	bEmergencyResetButton : BOOL;
+	bSafetyFencesClosed : BOOL;
+	nCurrentState : INT;
+END_VAR
+VAR_OUTPUT
+	bTriggerEmergency : BOOL;
+	bAllowOperation : BOOL;
+	sErrorMessage : STRING;
+END_VAR
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[bAllowOperation := bSafetyFencesClosed AND NOT bEmergencyButton;
+bTriggerEmergency := bEmergencyButton OR (NOT bSafetyFencesClosed AND(nCurrentState = 1 OR nCurrentState = 2));
+
+IF bEmergencyButton THEN
+	sErrorMessage := '***EMERGENCY STOP***';
+ELSIF NOT bSafetyFencesClosed THEN
+	sErrorMessage := 'EMERGENCY: Safety fence opened during operation!';
+END_IF]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

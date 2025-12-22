@@ -1,0 +1,82 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="FB_PusherClamp" Id="{f97b483d-b915-4fe2-b441-5a0e075a3d24}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_PusherClamp
+VAR_INPUT
+	bEnable : BOOL;
+	bClampCommand : BOOL;
+	bUnclampCommand : BOOL;
+	rTargetPosition : REAL;
+	rCurrentPosition : REAL;
+	rTolerance : REAL := 0.2;
+	tClampTime : TIME := T#1S;
+	tUnclampTime : TIME := T#800MS;
+END_VAR
+VAR_OUTPUT
+	bUnclamped : BOOL;
+	bAtPosition : BOOL;
+	bMoving : BOOL;
+	bError : BOOL;
+	bActive : BOOL;
+END_VAR
+VAR
+	eState : (IDLE, POSITIONING, CLAMPING, CLAMPED, UNCLAMPING, ERROR) := IDLE;
+	tonClamp : TON;
+	tonUnclamp : TON;
+	tonPositionTimeout : TON;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[bAtPosition := ABS(rCurrentPosition - rTargetPosition) <= rTolerance;
+
+CASE eState OF
+    IDLE:
+        bMoving := FALSE;
+        bUnclamped := TRUE;
+        bActive := FALSE;
+        tonClamp(IN := FALSE);
+        tonUnclamp(IN := FALSE);
+        
+        IF bEnable AND bClampCommand AND bAtPosition THEN
+            eState := CLAMPING;
+        END_IF
+        
+    CLAMPING:
+        bMoving := FALSE;
+        tonClamp(IN := TRUE, PT := tClampTime);
+        
+        IF tonClamp.Q THEN
+            eState := CLAMPED;
+            tonClamp(IN := FALSE);
+        END_IF
+        
+    CLAMPED:
+        bActive := TRUE;
+        bMoving := FALSE;
+        
+        IF bUnclampCommand OR NOT bEnable THEN
+            eState := UNCLAMPING;
+        END_IF
+        
+    UNCLAMPING:
+		bUnclamped := FALSE;
+		bActive := FALSE;
+        tonUnclamp(IN := TRUE, PT := tUnclampTime);
+        
+        IF tonUnclamp.Q THEN
+			bUnclamped := TRUE;
+            eState := IDLE;
+            tonUnclamp(IN := FALSE);
+        END_IF
+        
+    ERROR:
+        bError := TRUE;
+        bMoving := FALSE;
+        IF NOT bEnable THEN
+            eState := IDLE;
+            bError := FALSE;
+        END_IF
+END_CASE]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>
