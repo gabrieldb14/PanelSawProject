@@ -5,6 +5,14 @@
     {
       "AbsoluteMoniker": "D:0:0:{18BE9351-1DBB-407F-918C-FD5CE8375626}|HMI_PanelSaw\\HMI_PanelSaw.csproj|c:\\users\\gabri\\source\\repos\\panel saw\\panelsawproject\\hmi_panelsaw\\mainwindow.xaml.cs||{8B382828-6202-11D1-8870-0000F87579D2}|",
       "RelativeMoniker": "D:0:0:{18BE9351-1DBB-407F-918C-FD5CE8375626}|HMI_PanelSaw\\HMI_PanelSaw.csproj|solutionrelative:hmi_panelsaw\\mainwindow.xaml.cs||{8B382828-6202-11D1-8870-0000F87579D2}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{05C18A2D-1DA4-47A9-B187-B2D1D7CC3799}|Panel Saw\\PanelSaw\\PanelSaw.plcproj|C:\\Users\\Gabri\\source\\repos\\Panel Saw\\PanelSawProject\\Panel Saw\\PanelSaw\\GVLs\\GVL_HMI.TcGVL||{CFF47BB1-5559-4BDE-A2AF-06B30BC64F6C}|Panel_Saw.PanelSaw.GVL_HMI",
+      "RelativeMoniker": "D:0:0:{05C18A2D-1DA4-47A9-B187-B2D1D7CC3799}|Panel Saw\\PanelSaw\\PanelSaw.plcproj|solutionrelative:Panel Saw\\PanelSaw\\GVLs\\GVL_HMI.TcGVL||{CFF47BB1-5559-4BDE-A2AF-06B30BC64F6C}|Panel_Saw.PanelSaw.GVL_HMI"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{05C18A2D-1DA4-47A9-B187-B2D1D7CC3799}|Panel Saw\\PanelSaw\\PanelSaw.plcproj|C:\\Users\\Gabri\\source\\repos\\Panel Saw\\PanelSawProject\\Panel Saw\\PanelSaw\\POUs\\PRG_MACHINE.TcPOU||{CFF47BB1-5559-4BDE-A2AF-06B30BC64F6C}|Panel_Saw.PanelSaw.PRG_MACHINE",
+      "RelativeMoniker": "D:0:0:{05C18A2D-1DA4-47A9-B187-B2D1D7CC3799}|Panel Saw\\PanelSaw\\PanelSaw.plcproj|solutionrelative:Panel Saw\\PanelSaw\\POUs\\PRG_MACHINE.TcPOU||{CFF47BB1-5559-4BDE-A2AF-06B30BC64F6C}|Panel_Saw.PanelSaw.PRG_MACHINE"
     }
   ],
   "DocumentGroupContainers": [
@@ -14,7 +22,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 429,
-          "SelectedChildIndex": 7,
+          "SelectedChildIndex": 8,
           "Children": [
             {
               "$type": "Bookmark",
@@ -34,15 +42,33 @@
             },
             {
               "$type": "Bookmark",
-              "Name": "ST:1:0:{94c070b9-db0b-4415-9311-bac4eef266f5}"
-            },
-            {
-              "$type": "Bookmark",
               "Name": "ST:0:0:{b1e99781-ab81-11d0-b683-00aa00a3ee26}"
             },
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{40ea2e6b-2121-4bb8-a43e-c83c04b51041}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "PRG_MACHINE [Online]",
+              "DocumentMoniker": "C:\\Users\\Gabri\\source\\repos\\Panel Saw\\PanelSawProject\\Panel Saw\\PanelSaw\\POUs\\PRG_MACHINE.TcPOU",
+              "RelativeDocumentMoniker": "Panel Saw\\PanelSaw\\POUs\\PRG_MACHINE.TcPOU",
+              "ToolTip": "PRG_MACHINE [Panel Saw.PanelSaw]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2025-12-23T13:50:54.051Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "GVL_HMI [Online]",
+              "DocumentMoniker": "C:\\Users\\Gabri\\source\\repos\\Panel Saw\\PanelSawProject\\Panel Saw\\PanelSaw\\GVLs\\GVL_HMI.TcGVL",
+              "RelativeDocumentMoniker": "Panel Saw\\PanelSaw\\GVLs\\GVL_HMI.TcGVL",
+              "ToolTip": "GVL_HMI [Panel Saw.PanelSaw]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2025-12-23T13:49:47.373Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -52,7 +78,7 @@
               "RelativeDocumentMoniker": "HMI_PanelSaw\\MainWindow.xaml.cs",
               "ToolTip": "C:\\Users\\Gabri\\source\\repos\\Panel Saw\\PanelSawProject\\HMI_PanelSaw\\MainWindow.xaml.cs",
               "RelativeToolTip": "HMI_PanelSaw\\MainWindow.xaml.cs",
-              "ViewState": "AgIAAMAAAAAAAAAAAAAAAMQAAAAaAAAAAAAAAA==",
+              "ViewState": "AgIAADwAAAAAAAAAAAAAAFEAAABcAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-12-22T20:58:27.85Z",
               "EditorCaption": ""

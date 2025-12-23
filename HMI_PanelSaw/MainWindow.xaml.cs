@@ -18,6 +18,9 @@ namespace HMI_PanelSaw
         private HomeView _homeView;
         private ParametersView _parametersView;
 
+        private static readonly System.Windows.Media.SolidColorBrush ActiveBrush = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(100, 181, 246));
+        private static readonly System.Windows.Media.SolidColorBrush InactiveBrush = System.Windows.Media.Brushes.LightGray;
+
         public MainWindow()
         {
             InitComms();
@@ -35,25 +38,14 @@ namespace HMI_PanelSaw
             _adsClient.Connect("192.168.2.108.1.1", 851);
 
             //Variables for handle creation
-            _adsClient.AddVariable("GVL_HMI.rPusherFencePosition");
             _adsClient.AddVariable("GVL_HMI.sStateDescription");
             _adsClient.AddVariable("GVL_HMI.bStartCycle");
             _adsClient.AddVariable("GVL_HMI.bStopCycle");
             _adsClient.AddVariable("GVL_HMI.bEmergencyButton");
             _adsClient.AddVariable("GVL_HMI.bEmergencyResetButton");
-            _adsClient.AddVariable("GVL_HMI.nTotalCut");
-            _adsClient.AddVariable("GVL_HMI.bSafetyFencesClosed");
-            _adsClient.AddVariable("GVL_HMI.bPusherClampActive");
-            _adsClient.AddVariable("GVL_HMI.bPusherClampCommand");
-            _adsClient.AddVariable("GVL_HMI.bPressureBeamCommand");
             _adsClient.AddVariable("GVL_HMI.bSafetyFencesClosed");
             _adsClient.AddVariable("GVL_HMI.bAirTablesActive");
-            _adsClient.AddVariable("GVL_HMI.bMainSawActive");
-            _adsClient.AddVariable("GVL_HMI.bScoringSawActive");
-            _adsClient.AddVariable("GVL_HMI.nCurrentCutIndex");
-            _adsClient.AddVariable("GVL_Parameters.stPanelData.rPanelWidth");
-            _adsClient.AddVariable("GVL_Parameters.stPanelData.rPanelLength");
-            _adsClient.AddVariable("GVL_Parameters.stPanelData.rPanelThickness");
+            _adsClient.AddVariable("GVL_HMI.nMachineState");
 
         }
         
@@ -79,25 +71,15 @@ namespace HMI_PanelSaw
         private void ButtonActive()
         {
             try
-            {
+            {   
                 bool airTable = _adsClient.Read<bool>("GVL_HMI.bAirTablesActive");
                 bool safetyFences = _adsClient.Read<bool>("GVL_HMI.bSafetyFencesClosed");
-                if (airTable)
-                {
-                    btnAirTable.Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(100, 181, 246));
-                }
-                else
-                {
-                    btnAirTable.Background = System.Windows.Media.Brushes.LightGray;
-                }
-                if (safetyFences)
-                {
-                    btnSafetyFences.Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(100, 181, 246));
-                }
-                else
-                {
-                    btnSafetyFences.Background = System.Windows.Media.Brushes.LightGray;
-                }
+                short machineState = _adsClient.Read<short>("GVL_HMI.nMachineState");
+                btnAirTable.Background = airTable ? ActiveBrush : InactiveBrush;
+                btnSafetyFences.Background = safetyFences ? ActiveBrush : InactiveBrush;
+                btnStartCycle.Background = machineState >= 1 && machineState <= 3 ? ActiveBrush: InactiveBrush;
+                btnStopCycle.Background = machineState == 4 ? ActiveBrush: InactiveBrush ;
+                btnEmergency.Background = machineState == 999 ? ActiveBrush : InactiveBrush;
             }
             catch (Exception)
             {
@@ -127,18 +109,16 @@ namespace HMI_PanelSaw
 
             activeButton.Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(100, 181, 246));
         }
-        private async void BtnStartCycle_Click(object sender, RoutedEventArgs e)
+        private void BtnStartCycle_Click(object sender, RoutedEventArgs e)
         {
-            _adsClient.Write("GVL_HMI.bStartCycle", true);
-            await Task.Delay(100);
-            _adsClient.Write("GVL_HMI.bStartCycle", false);
+            var startCycle = _adsClient.Read<bool>("GVL_HMI.bStartCycle");
+            _adsClient.Write("GVL_HMI.bStartCycle",!startCycle);
         }
 
-        private async void BtnStopCycle_Click(object sender, RoutedEventArgs e)
+        private void BtnStopCycle_Click(object sender, RoutedEventArgs e)
         {
-            _adsClient.Write("GVL_HMI.bStopCycle", true);
-            await Task.Delay(100);
-            _adsClient.Write("GVL_HMI.bStopCycle", false);
+            var stopCycle = _adsClient.Read<bool>("GVL_HMI.bStopCycle");
+            _adsClient.Write("GVL_HMI.bStopCycle", !stopCycle);
         }
         private async void BtnEmergencyReset_Click(object sender, RoutedEventArgs e)
         {

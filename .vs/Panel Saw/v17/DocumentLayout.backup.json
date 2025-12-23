@@ -3,28 +3,16 @@
   "WorkspaceRootPath": "C:\\Users\\Gabri\\source\\repos\\Panel Saw\\PanelSawProject\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{18BE9351-1DBB-407F-918C-FD5CE8375626}|HMI_PanelSaw\\HMI_PanelSaw.csproj|c:\\users\\gabri\\source\\repos\\panel saw\\panelsawproject\\hmi_panelsaw\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{18BE9351-1DBB-407F-918C-FD5CE8375626}|HMI_PanelSaw\\HMI_PanelSaw.csproj|solutionrelative:hmi_panelsaw\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{05C18A2D-1DA4-47A9-B187-B2D1D7CC3799}|Panel Saw\\PanelSaw\\PanelSaw.plcproj|C:\\Users\\Gabri\\source\\repos\\Panel Saw\\PanelSawProject\\Panel Saw\\PanelSaw\\POUs\\FB_SawCut.TcPOU||{CFF47BB1-5559-4BDE-A2AF-06B30BC64F6C}|Panel_Saw.PanelSaw.PRG_MACHINE.fbSawCut",
-      "RelativeMoniker": "D:0:0:{05C18A2D-1DA4-47A9-B187-B2D1D7CC3799}|Panel Saw\\PanelSaw\\PanelSaw.plcproj|solutionrelative:Panel Saw\\PanelSaw\\POUs\\FB_SawCut.TcPOU||{CFF47BB1-5559-4BDE-A2AF-06B30BC64F6C}|Panel_Saw.PanelSaw.PRG_MACHINE.fbSawCut"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{05C18A2D-1DA4-47A9-B187-B2D1D7CC3799}|Panel Saw\\PanelSaw\\PanelSaw.plcproj|C:\\Users\\Gabri\\source\\repos\\Panel Saw\\PanelSawProject\\Panel Saw\\PanelSaw\\POUs\\PRG_MACHINE.TcPOU||{CFF47BB1-5559-4BDE-A2AF-06B30BC64F6C}|Panel_Saw.PanelSaw.PRG_MACHINE",
-      "RelativeMoniker": "D:0:0:{05C18A2D-1DA4-47A9-B187-B2D1D7CC3799}|Panel Saw\\PanelSaw\\PanelSaw.plcproj|solutionrelative:Panel Saw\\PanelSaw\\POUs\\PRG_MACHINE.TcPOU||{CFF47BB1-5559-4BDE-A2AF-06B30BC64F6C}|Panel_Saw.PanelSaw.PRG_MACHINE"
+      "AbsoluteMoniker": "D:0:0:{18BE9351-1DBB-407F-918C-FD5CE8375626}|HMI_PanelSaw\\HMI_PanelSaw.csproj|c:\\users\\gabri\\source\\repos\\panel saw\\panelsawproject\\hmi_panelsaw\\mainwindow.xaml.cs||{8B382828-6202-11D1-8870-0000F87579D2}|",
+      "RelativeMoniker": "D:0:0:{18BE9351-1DBB-407F-918C-FD5CE8375626}|HMI_PanelSaw\\HMI_PanelSaw.csproj|solutionrelative:hmi_panelsaw\\mainwindow.xaml.cs||{8B382828-6202-11D1-8870-0000F87579D2}|"
     },
     {
       "AbsoluteMoniker": "D:0:0:{05C18A2D-1DA4-47A9-B187-B2D1D7CC3799}|Panel Saw\\PanelSaw\\PanelSaw.plcproj|C:\\Users\\Gabri\\source\\repos\\Panel Saw\\PanelSawProject\\Panel Saw\\PanelSaw\\GVLs\\GVL_HMI.TcGVL||{CFF47BB1-5559-4BDE-A2AF-06B30BC64F6C}|Panel_Saw.PanelSaw.GVL_HMI",
       "RelativeMoniker": "D:0:0:{05C18A2D-1DA4-47A9-B187-B2D1D7CC3799}|Panel Saw\\PanelSaw\\PanelSaw.plcproj|solutionrelative:Panel Saw\\PanelSaw\\GVLs\\GVL_HMI.TcGVL||{CFF47BB1-5559-4BDE-A2AF-06B30BC64F6C}|Panel_Saw.PanelSaw.GVL_HMI"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{05C18A2D-1DA4-47A9-B187-B2D1D7CC3799}|Panel Saw\\PanelSaw\\PanelSaw.plcproj|C:\\Users\\Gabri\\source\\repos\\Panel Saw\\PanelSawProject\\Panel Saw\\PanelSaw\\POUs\\FB_PusherClamp.TcPOU||{CFF47BB1-5559-4BDE-A2AF-06B30BC64F6C}|Panel_Saw.PanelSaw.PRG_MACHINE.fbPusherClamp",
-      "RelativeMoniker": "D:0:0:{05C18A2D-1DA4-47A9-B187-B2D1D7CC3799}|Panel Saw\\PanelSaw\\PanelSaw.plcproj|solutionrelative:Panel Saw\\PanelSaw\\POUs\\FB_PusherClamp.TcPOU||{CFF47BB1-5559-4BDE-A2AF-06B30BC64F6C}|Panel_Saw.PanelSaw.PRG_MACHINE.fbPusherClamp"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{05C18A2D-1DA4-47A9-B187-B2D1D7CC3799}|Panel Saw\\PanelSaw\\PanelSaw.plcproj|C:\\Users\\Gabri\\source\\repos\\Panel Saw\\PanelSawProject\\Panel Saw\\PanelSaw\\POUs\\FB_PressureBeam.TcPOU||{CFF47BB1-5559-4BDE-A2AF-06B30BC64F6C}|Panel_Saw.PanelSaw.PRG_MACHINE.fbPressureBeam",
-      "RelativeMoniker": "D:0:0:{05C18A2D-1DA4-47A9-B187-B2D1D7CC3799}|Panel Saw\\PanelSaw\\PanelSaw.plcproj|solutionrelative:Panel Saw\\PanelSaw\\POUs\\FB_PressureBeam.TcPOU||{CFF47BB1-5559-4BDE-A2AF-06B30BC64F6C}|Panel_Saw.PanelSaw.PRG_MACHINE.fbPressureBeam"
+      "AbsoluteMoniker": "D:0:0:{05C18A2D-1DA4-47A9-B187-B2D1D7CC3799}|Panel Saw\\PanelSaw\\PanelSaw.plcproj|C:\\Users\\Gabri\\source\\repos\\Panel Saw\\PanelSawProject\\Panel Saw\\PanelSaw\\POUs\\PRG_MACHINE.TcPOU||{CFF47BB1-5559-4BDE-A2AF-06B30BC64F6C}|Panel_Saw.PanelSaw.PRG_MACHINE",
+      "RelativeMoniker": "D:0:0:{05C18A2D-1DA4-47A9-B187-B2D1D7CC3799}|Panel Saw\\PanelSaw\\PanelSaw.plcproj|solutionrelative:Panel Saw\\PanelSaw\\POUs\\PRG_MACHINE.TcPOU||{CFF47BB1-5559-4BDE-A2AF-06B30BC64F6C}|Panel_Saw.PanelSaw.PRG_MACHINE"
     }
   ],
   "DocumentGroupContainers": [
@@ -34,7 +22,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 429,
-          "SelectedChildIndex": 7,
+          "SelectedChildIndex": 8,
           "Children": [
             {
               "$type": "Bookmark",
@@ -54,39 +42,11 @@
             },
             {
               "$type": "Bookmark",
-              "Name": "ST:1:0:{94c070b9-db0b-4415-9311-bac4eef266f5}"
-            },
-            {
-              "$type": "Bookmark",
               "Name": "ST:0:0:{b1e99781-ab81-11d0-b683-00aa00a3ee26}"
             },
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{40ea2e6b-2121-4bb8-a43e-c83c04b51041}"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "MainWindow.xaml.cs",
-              "DocumentMoniker": "C:\\Users\\Gabri\\source\\repos\\Panel Saw\\PanelSawProject\\HMI_PanelSaw\\MainWindow.xaml.cs",
-              "RelativeDocumentMoniker": "HMI_PanelSaw\\MainWindow.xaml.cs",
-              "ToolTip": "C:\\Users\\Gabri\\source\\repos\\Panel Saw\\PanelSawProject\\HMI_PanelSaw\\MainWindow.xaml.cs",
-              "RelativeToolTip": "HMI_PanelSaw\\MainWindow.xaml.cs",
-              "ViewState": "AgIAADYAAAAAAAAAAAAAAHMAAAArAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-22T20:12:03.566Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "FB_SawCut [Online]",
-              "DocumentMoniker": "C:\\Users\\Gabri\\source\\repos\\Panel Saw\\PanelSawProject\\Panel Saw\\PanelSaw\\POUs\\FB_SawCut.TcPOU",
-              "RelativeDocumentMoniker": "Panel Saw\\PanelSaw\\POUs\\FB_SawCut.TcPOU",
-              "ToolTip": "FB_SawCut [Panel Saw.PanelSaw]",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2025-12-22T19:57:14.777Z",
-              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -96,40 +56,31 @@
               "RelativeDocumentMoniker": "Panel Saw\\PanelSaw\\POUs\\PRG_MACHINE.TcPOU",
               "ToolTip": "PRG_MACHINE [Panel Saw.PanelSaw]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2025-12-22T16:26:00.043Z",
+              "WhenOpened": "2025-12-23T13:50:54.051Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "FB_PusherClamp [Online]",
-              "DocumentMoniker": "C:\\Users\\Gabri\\source\\repos\\Panel Saw\\PanelSawProject\\Panel Saw\\PanelSaw\\POUs\\FB_PusherClamp.TcPOU",
-              "RelativeDocumentMoniker": "Panel Saw\\PanelSaw\\POUs\\FB_PusherClamp.TcPOU",
-              "ToolTip": "FB_PusherClamp [Panel Saw.PanelSaw]",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2025-12-22T14:49:33.553Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "FB_PressureBeam [Online]",
-              "DocumentMoniker": "C:\\Users\\Gabri\\source\\repos\\Panel Saw\\PanelSawProject\\Panel Saw\\PanelSaw\\POUs\\FB_PressureBeam.TcPOU",
-              "RelativeDocumentMoniker": "Panel Saw\\PanelSaw\\POUs\\FB_PressureBeam.TcPOU",
-              "ToolTip": "FB_PressureBeam [Panel Saw.PanelSaw]",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2025-12-22T14:13:55.605Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 1,
               "Title": "GVL_HMI [Online]",
               "DocumentMoniker": "C:\\Users\\Gabri\\source\\repos\\Panel Saw\\PanelSawProject\\Panel Saw\\PanelSaw\\GVLs\\GVL_HMI.TcGVL",
               "RelativeDocumentMoniker": "Panel Saw\\PanelSaw\\GVLs\\GVL_HMI.TcGVL",
               "ToolTip": "GVL_HMI [Panel Saw.PanelSaw]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2025-12-22T14:11:46.975Z",
+              "WhenOpened": "2025-12-23T13:49:47.373Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "MainWindow.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\Gabri\\source\\repos\\Panel Saw\\PanelSawProject\\HMI_PanelSaw\\MainWindow.xaml.cs",
+              "RelativeDocumentMoniker": "HMI_PanelSaw\\MainWindow.xaml.cs",
+              "ToolTip": "C:\\Users\\Gabri\\source\\repos\\Panel Saw\\PanelSawProject\\HMI_PanelSaw\\MainWindow.xaml.cs",
+              "RelativeToolTip": "HMI_PanelSaw\\MainWindow.xaml.cs",
+              "ViewState": "AgIAADwAAAAAAAAAAAAAAE8AAAA/AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-22T20:58:27.85Z",
               "EditorCaption": ""
             }
           ]

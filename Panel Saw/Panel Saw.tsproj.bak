@@ -13,7 +13,7 @@
 		</System>
 		<Plc>
 			<Project GUID="{05C18A2D-1DA4-47A9-B187-B2D1D7CC3799}" Name="PanelSaw" PrjFilePath="PanelSaw\PanelSaw.plcproj" TmcFilePath="PanelSaw\PanelSaw.tmc" ReloadTmc="true" AmsPort="851" FileArchiveSettings="#x000e" SymbolicMapping="true">
-				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcHash="{08830903-9E7A-2F38-7190-E5E2D18A8B05}" TmcPath="PanelSaw\PanelSaw.tmc">
+				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcHash="{5A9DCA58-AD99-5F48-C6E7-394086656FB0}" TmcPath="PanelSaw\PanelSaw.tmc">
 					<Name>PanelSaw Instance</Name>
 					<CLSID ClassFactory="TcPlc30">{08500001-0000-0000-F000-000000000064}</CLSID>
 					<Contexts>
