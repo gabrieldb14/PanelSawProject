@@ -49,6 +49,9 @@ _Libraries/
 *.compileinfo
 LineIDs.dbg
 *.TMC
+*.~u
+*.~RF
+*.tmp
 
 # Windows image file caches
 Thumbs.db

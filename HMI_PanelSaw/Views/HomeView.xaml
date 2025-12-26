@@ -12,7 +12,7 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <TextBlock Grid.Row="0" Text="Main Menu " FontSize="32" FontWeight="Bold" Foreground="#333" Margin="0,0,20,0" HorizontalAlignment="Right"/>
+        <TextBlock Grid.Row="0" Text="Main Menu " FontSize="32" FontWeight="Bold" Foreground="#333" HorizontalAlignment="Right"/>
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
@@ -34,7 +34,7 @@
                     <!--Machine Status-->
                     <Grid Grid.Row="0" Grid.Column="0" Margin="10">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="200"/>
+                            <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
@@ -45,20 +45,22 @@
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
-                        <TextBlock Text="Machine Status" FontSize="24" FontWeight="Bold" Foreground="#333" Margin="10,10,0,10"/>
-                        <TextBlock Grid.Row="1" Grid.Column="0" Text="Total Cuts: " FontSize="20" VerticalAlignment="Center" Margin="5"/>
-                        <Label x:Name="lblTotalCut" Grid.Row="1" Grid.Column="1" Content="0" FontSize="20" FontWeight="Bold" VerticalContentAlignment="Center"/>
-                        <TextBlock Grid.Row="2" Grid.Column="0" Text="Current Cut Index: " FontSize="20" VerticalAlignment="Center" Margin="5"/>
-                        <TextBlock x:Name="txtCurrentCut" Grid.Row="2" Grid.Column="1" Text="0" FontSize="20" FontWeight="Bold" VerticalAlignment="Center"/>
+                        <TextBlock  Grid.Row="0" Text="Machine Status" FontSize="24" FontWeight="Bold" Foreground="#333" Margin="0,10,0,10"/>
 
-                        <TextBlock Grid.Row="3" Grid.Column="0" Text="Safety Fences: " FontSize="20" VerticalAlignment="Center" Margin="5"/>
-                        <Label x:Name="lblSafetyFence" Grid.Row="3" Grid.Column="1" Content="0" FontSize="20" FontWeight="Bold" VerticalContentAlignment="Center"/>
+                        <TextBlock Grid.Row="1" Grid.Column="0" Text="Pusher Fence Position: " FontSize="20" VerticalAlignment="Center" Foreground="#333" Margin="0,0,0,5"/>
+                        <TextBlock x:Name="txtPusherFencePosition" Grid.Row="1" Grid.Column="1" Text="0" FontSize="20" Foreground="#333" VerticalAlignment="Center" Margin="0,0,0,5"/>
+                        
+                        <TextBlock Grid.Row="2" Grid.Column="0" Text="Pusher Clamp Status: " FontSize="20" Foreground="#333" VerticalAlignment="Center" Margin="0,0,0,5"/>
+                        <TextBlock x:Name="txtPusherClampStatus" Grid.Row="2" Grid.Column="1" Text="0" FontSize="20" Foreground="#333" VerticalAlignment="Center" Margin="0,0,0,5"/>
 
-                        <TextBlock Grid.Row="4" Grid.Column="0" Text="Pusher Clamp: " FontSize="20" VerticalAlignment="Center" Margin="5"/>
-                        <Label x:Name="lblPusherClamp" Grid.Row="4" Grid.Column="1" Content="0" FontSize="20" FontWeight="Bold" VerticalContentAlignment="Center"/>
+                        <TextBlock Grid.Row="3" Grid.Column="0" Text="Pressure Beam Status: " FontSize="20" Foreground="#333" VerticalAlignment="Center" Margin="0,0,0,5"/>
+                        <TextBlock x:Name="txtPressureBeamStatus" Grid.Row="3" Grid.Column="1" Text="0" FontSize="20" Foreground="#333" VerticalAlignment="Center" Margin="0,0,0,5"/>
 
-                        <TextBlock Grid.Row="5" Grid.Column="0" Text="Pusher position: " FontSize="20" VerticalAlignment="Center" Margin="5"/>
-                        <Label x:Name="lblPusherPosition" Grid.Row="5" Grid.Column="1" Content="0" FontSize="20" FontWeight="Bold" VerticalContentAlignment="Center"/>
+                        <TextBlock Grid.Row="4" Grid.Column="0" Text="Safety Fence: " FontSize="20" VerticalAlignment="Center" Foreground="#333" Margin="0,0,0,5"/>
+                        <TextBlock x:Name="txtSafetyFence" Grid.Row="4" Grid.Column="1" Text="0" FontSize="20" Foreground="#333" VerticalAlignment="Center" Margin="0,0,0,5"/>
+
+                        <TextBlock Grid.Row="5" Grid.Column="0" Text="Air tables: " FontSize="20" Foreground="#333" VerticalAlignment="Center" Margin="0,0,0,5" />
+                        <TextBlock x:Name="txtAirTable" Grid.Row="5" Grid.Column="1" Text="0" FontSize="20" Foreground="#333" VerticalAlignment="Center" Margin="0,0,0,5"/>
                     </Grid>
                     <!--Saw Status-->
                     <Grid Grid.Row="0" Grid.Column="1" Margin="10">
@@ -74,12 +76,21 @@
                             <RowDefinition Height="Auto"/>
 
                         </Grid.RowDefinitions>
-                        <TextBlock Grid.Column="0" Grid.Row="0" Text="Saw Status" FontSize="24" FontWeight="Bold" Foreground="#333" Margin="10"/>
-                        <TextBlock Grid.Row="1" Grid.Column="0" Text="Main Blade:" FontSize="20"/>
-                        <TextBlock x:Name="txtMainSawStatus" Grid.Row="1" Grid.Column="1" Text="" FontSize="20"/>
+                        <TextBlock Grid.Column="0" Grid.Row="0" Text="Saw Status" FontSize="24" FontWeight="Bold" Foreground="#333" Margin="0,10,10,10"/>
+                        <TextBlock Grid.Row="1" Grid.Column="0" Text="Main Blade:" FontSize="20" Foreground="#333" Margin="0,0,0,5"/>
+                        <TextBlock x:Name="txtMainSawStatus" Grid.Row="1" Grid.Column="1" Text="" FontSize="20" Foreground="#333"/>
                         
-                        <TextBlock Grid.Row="2" Grid.Column="0" Text="Scoring Blade:" FontSize="20"/>
-                        <TextBlock x:Name="txtScoringSawStatus" Grid.Row="2" Grid.Column="1" Text="" FontSize="20"/>
+                        <TextBlock Grid.Row="2" Grid.Column="0" Text="Scoring Blade:" FontSize="20" Foreground="#333" Margin="0,0,0,5"/>
+                        <TextBlock x:Name="txtScoringSawStatus" Grid.Row="2" Grid.Column="1" Text="" FontSize="20" Foreground="#333"/>
+                    </Grid>
+                    <!--Operating Instructions-->
+                    <Grid Grid.Row="2" Grid.ColumnSpan="3" Margin="10" VerticalAlignment="Bottom">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0" Text="Operating Instructions:" FontSize="24" FontWeight="Bold" Foreground="#333"/>
+                        <TextBlock Grid.Row="1" Grid.ColumnSpan="2" FontSize="20" Foreground="#333"><Run Text="To start the cutting cycle, insert your cutlist via .csv file or manually. Be sure that your safety fences "/><LineBreak/><Run Text="are closed and"/><Run Text=" the air table is active for convenience. When ready, just push the Start Cycle button"/><Run Language="pt-br" Text="."/></TextBlock>
                     </Grid>
                 </Grid>
 
@@ -92,7 +103,7 @@
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition/>
+                        <RowDefinition Height="Auto"/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
                     <!--Cut List DGV-->
@@ -106,7 +117,7 @@
                             <ColumnDefinition Width="51*"/>
                         </Grid.ColumnDefinitions>
 
-                        <TextBlock Grid.Row="0" Text="Cut List (Max 20 cuts)" FontSize="24" FontWeight="Bold" Foreground="#333" Margin="0,0,0,10" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+                        <TextBlock Grid.Row="0" Text="Cut List (Max 20 cuts)" FontSize="24" FontWeight="Bold" Foreground="#333" Margin="0,10,0,10" VerticalAlignment="Top" HorizontalAlignment="Left"/>
 
                         <DataGrid x:Name="dgCutList" Grid.Column="0" Grid.Row="1" 
                        AutoGenerateColumns="False" 
@@ -123,24 +134,41 @@
                         </DataGrid>
                         <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Center" Margin="0,10,0,0" Width="130">
                             <Button x:Name="btnAddCut" Content="Load from file" 
-                         Width="120" Height="50" FontSize="16" FontWeight="Bold" 
+                         Width="120" Height="50" FontSize="16" 
                          Background="#D9D9D9" Foreground="#333" Margin="5" 
                          Click="BtnLoadFile_Click"/>
                             <Button x:Name="btnRemoveCut" Content="Remove Cut" 
-                         Width="120" Height="50" FontSize="16" FontWeight="Bold" 
+                         Width="120" Height="50" FontSize="16" 
                          Background="#D9D9D9" Foreground="#333" Margin="5" 
                         Click="BtnRemoveCut_Click"/>
                             <Button x:Name="btnClearAllCuts" Content="Clear All" 
-                         Width="120" Height="50" FontSize="16" FontWeight="Bold" 
+                         Width="120" Height="50" FontSize="16"
                          Background="#D9D9D9" Foreground="#333" Margin="5" 
                          Click="BtnClearAllCuts_Click"/>
                             <Button x:Name="btnSaveCuts" Content="Save to PLC" 
-                         Width="120" Height="50" FontSize="16" FontWeight="Bold" 
+                         Width="120" Height="50" FontSize="16" 
                          Background="Red" Foreground="White" Margin="5" 
                          Click="BtnSaveCuts_Click"/>
                         </StackPanel>
                     </Grid>
-                    <Grid Grid.Column="1" Margin="0,10,0,0">
+                    <!--Cut list Parameters-->
+                    <Grid Grid.Row="1" Grid.Column="0" Margin="20,10,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="Total Cuts: " FontSize="20" Foreground="#333"/>
+                        <TextBlock x:Name="txtTotalCut" Grid.Column="1" Text="0" FontSize="20" Foreground="#333" Margin="0,0,5,0"/>
+                        <TextBlock Grid.Column="2" Text="Current Cut Index: " FontSize="20" Foreground="#333" HorizontalAlignment="Right"/>
+                        <TextBlock x:Name="txtCurrentCutIndex" Grid.Column="3" Text="0" FontSize="20" Foreground="#333" Margin="0,0,5,0"/>
+                        
+                        
+                        
+                    </Grid>
+                    <!--Parameters-->
+                    <Grid Grid.Column="1" Margin="0,20,0,0" Grid.RowSpan="2">
                         <TextBlock Grid.Row="0" Grid.Column="0" Text="Wood Panel Parameters" FontSize="24" FontWeight="Bold" Foreground="#333" Margin="0,0,0,10"/>
                         <Grid Margin="0,36,0,0">
                             <Grid.ColumnDefinitions>
@@ -161,7 +189,6 @@
 
                         </Grid>
                     </Grid>
-
                 </Grid>
             </Border>
         </Grid>

@@ -11,146 +11,148 @@
         d:DesignHeight="1080" d:DesignWidth="1920"
         KeyDown="Window_KeyDown">
 
-    <Grid x:Name="MainWindow1" Background="#FF9F9F9F">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="50"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="100"/>
-        </Grid.RowDefinitions>
-        <Button x:Name="btnMinimizeWindow" Grid.Row="0" Width="50" Height="50" HorizontalAlignment="Left" Margin="10,0,0,0" Content="__" IsCancel="False" FontSize="36" Click="BtnMinimizeWindow_Click" FontWeight="Bold"/>
-        <Button x:Name="btnCloseWindow" Grid.Row="0" Width="50" Height="50" HorizontalAlignment="Left" Margin="70,0,0,0" Content="X" IsCancel="False" FontSize="36" FontWeight="Bold" Click="BtnCloseWindow_Click"/>
-        <!-- Top Status Bar -->
-        <Grid x:Name="StatusBar" Grid.Row="0" Margin="0,5,30,5" HorizontalAlignment="Right" Width="700">
-            <Border BorderBrush="Black" BorderThickness="2" Background="#B6B6B6">
-                <Grid>
+    <Viewbox Stretch="Uniform">
+        <Grid x:Name="MainWindow1" Background="#FF9F9F9F" Width="1920" Height="1080">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="100"/>
+            </Grid.RowDefinitions>
+            <Button x:Name="btnMinimizeWindow" Grid.Row="0" Width="50" Height="50" HorizontalAlignment="Left" Margin="10,0,0,0" Content="__" IsCancel="False" FontSize="36" Click="BtnMinimizeWindow_Click" FontWeight="Bold"/>
+            <Button x:Name="btnCloseWindow" Grid.Row="0" Width="50" Height="50" HorizontalAlignment="Left" Margin="70,0,0,0" Content="X" IsCancel="False" FontSize="36" FontWeight="Bold" Click="BtnCloseWindow_Click"/>
+            <!-- Top Status Bar -->
+            <Grid x:Name="StatusBar" Grid.Row="0" Margin="0,5,30,5" HorizontalAlignment="Right" Width="700">
+                <Border BorderBrush="Black" BorderThickness="2" Background="#B6B6B6">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        
+                        <TextBlock Grid.Column="0" Text="STATUS:" Foreground="#000000" FontSize="20" 
+                                   Margin="5,0,10,0" VerticalAlignment="Center"/>
+                        <TextBlock Grid.Column="1" x:Name="txtStatus" Text="READY" Foreground="Black" 
+                                   FontSize="20" Margin="0,0,10,0" VerticalAlignment="Center" 
+                                   TextTrimming="CharacterEllipsis" Background="#B6B6B6" 
+                                   HorizontalAlignment="Stretch"/>
+                    </Grid>
+                </Border>
+            </Grid>
+
+            <!-- Main Content Area - ContentControl for dynamic views -->
+            <Border x:Name="MainArea" Grid.Row="1" BorderBrush="Gray" BorderThickness="2" Background="#FF9F9F9F">
+                <ContentControl x:Name="ContentArea"/>
+            </Border>
+
+            <!-- Bottom Navigation Bar -->
+            <Grid x:Name="BottomBar" Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Left Side - Main Navigation Buttons -->
+                <Grid x:Name="ControlButtons">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+
                     </Grid.ColumnDefinitions>
-                    
-                    <TextBlock Grid.Column="0" Text="STATUS:" Foreground="#000000" FontSize="20" 
-                               Margin="5,0,10,0" VerticalAlignment="Center"/>
-                    <TextBlock Grid.Column="1" x:Name="txtStatus" Text="READY" Foreground="Black" 
-                               FontSize="20" Margin="0,0,10,0" VerticalAlignment="Center" 
-                               TextTrimming="CharacterEllipsis" Background="#B6B6B6" 
-                               HorizontalAlignment="Stretch"/>
-                </Grid>
-            </Border>
-        </Grid>
+                    <Button Grid.Column="0" x:Name="btnHome" Click="BtnHome_Click" Width="90" Height="90" 
+                                Margin="5" Background="#FFD9D9D9" VerticalContentAlignment="Bottom" 
+                                FontWeight="Bold" FontSize="16">
+                            <StackPanel Orientation="Vertical">
+                                <Image Source="/Media/Home.png" Stretch="None" VerticalAlignment="Top" 
+                                       HorizontalAlignment="Center"/>
+                                <Label Content="F1" Margin="0,-2,0,0" HorizontalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
 
-        <!-- Main Content Area - ContentControl for dynamic views -->
-        <Border x:Name="MainArea" Grid.Row="1" BorderBrush="Gray" BorderThickness="2" Background="#FF9F9F9F">
-            <ContentControl x:Name="ContentArea"/>
-        </Border>
+                        <Button Grid.Column="1" x:Name="btnParameters" Click="BtnParameters_Click" Width="90" Height="90" 
+                                Margin="5" Background="#FFD9D9D9" VerticalContentAlignment="Bottom" 
+                                FontWeight="Bold" FontSize="16">
+                            <StackPanel Orientation="Vertical">
+                                <Image Source="/Media/Parameters.png" Stretch="None" VerticalAlignment="Top" 
+                                       HorizontalAlignment="Center"/>
+                                <Label Content="F2" Margin="0,-2,0,0" HorizontalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
 
-        <!-- Bottom Navigation Bar -->
-        <Grid x:Name="BottomBar" Grid.Row="2">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
+                        <Button Grid.Column="2" x:Name="btnStartCycle" Click="BtnStartCycle_Click" Width="90" Height="90" 
+                                Margin="5" Background="#FFD9D9D9" VerticalContentAlignment="Bottom" 
+                                FontWeight="Bold" FontSize="16">
+                            <StackPanel Orientation="Vertical">
+                                <Image Source="/Media/StartCycle.png" Stretch="None" VerticalAlignment="Top" 
+                                       HorizontalAlignment="Center"/>
+                                <Label Content="F5" Margin="0,-2,0,0" HorizontalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
 
-            <!-- Left Side - Main Navigation Buttons -->
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-
-                </Grid.ColumnDefinitions>
-                <Button Grid.Column="0" x:Name="btnHome" Click="BtnHome_Click" Width="90" Height="90" 
-                            Margin="5" Background="#FFD9D9D9" VerticalContentAlignment="Bottom" 
-                            FontWeight="Bold" FontSize="16">
+                        <Button Grid.Column="3" x:Name="btnStopCycle" Click="BtnStopCycle_Click" Width="90" Height="90" 
+                                Margin="5" Background="#FFD9D9D9" VerticalContentAlignment="Bottom" 
+                                FontWeight="Bold" FontSize="16">
+                            <StackPanel Orientation="Vertical">
+                                <Image Source="/Media/StopCycle.png" Stretch="None" VerticalAlignment="Top" 
+                                       HorizontalAlignment="Center"/>
+                                <Label Content="F6" Margin="0,-2,0,0" HorizontalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+                    <Button Grid.Column="4" x:Name="btnAirTable" Click="BtnAirTable_Click" Width="90" Height="90" 
+                            Background="#FFD9D9D9" VerticalContentAlignment="Bottom" 
+                            FontWeight="Bold" FontSize="16" Margin="5,5,5,5">
                         <StackPanel Orientation="Vertical">
-                            <Image Source="/Media/Home.png" Stretch="None" VerticalAlignment="Top" 
-                                   HorizontalAlignment="Center"/>
-                            <Label Content="F1" Margin="0,-2,0,0" HorizontalAlignment="Center"/>
+                            <Image Source="/Media/AirTable.png" RenderTransformOrigin="0.5,0.5" Width="53" Height="53" >
+                                <Image.RenderTransform>
+                                    <TransformGroup>
+                                        <ScaleTransform/>
+                                        <SkewTransform/>
+                                        <RotateTransform Angle="-90"/>
+                                        <TranslateTransform/>
+                                    </TransformGroup>
+                                </Image.RenderTransform>
+                            </Image>
+                            <Label Content="Air Table" Margin="0,-2,0,0"/>
                         </StackPanel>
                     </Button>
-
-                    <Button Grid.Column="1" x:Name="btnParameters" Click="BtnParameters_Click" Width="90" Height="90" 
-                            Margin="5" Background="#FFD9D9D9" VerticalContentAlignment="Bottom" 
-                            FontWeight="Bold" FontSize="16">
-                        <StackPanel Orientation="Vertical">
-                            <Image Source="/Media/Parameters.png" Stretch="None" VerticalAlignment="Top" 
-                                   HorizontalAlignment="Center"/>
-                            <Label Content="F2" Margin="0,-2,0,0" HorizontalAlignment="Center"/>
-                        </StackPanel>
-                    </Button>
-
-                    <Button Grid.Column="2" x:Name="btnStartCycle" Click="BtnStartCycle_Click" Width="90" Height="90" 
-                            Margin="5" Background="#FFD9D9D9" VerticalContentAlignment="Bottom" 
-                            FontWeight="Bold" FontSize="16">
-                        <StackPanel Orientation="Vertical">
-                            <Image Source="/Media/StartCycle.png" Stretch="None" VerticalAlignment="Top" 
-                                   HorizontalAlignment="Center"/>
-                            <Label Content="F5" Margin="0,-2,0,0" HorizontalAlignment="Center"/>
-                        </StackPanel>
-                    </Button>
-
-                    <Button Grid.Column="3" x:Name="btnStopCycle" Click="BtnStopCycle_Click" Width="90" Height="90" 
-                            Margin="5" Background="#FFD9D9D9" VerticalContentAlignment="Bottom" 
-                            FontWeight="Bold" FontSize="16">
-                        <StackPanel Orientation="Vertical">
-                            <Image Source="/Media/StopCycle.png" Stretch="None" VerticalAlignment="Top" 
-                                   HorizontalAlignment="Center"/>
-                            <Label Content="F6" Margin="0,-2,0,0" HorizontalAlignment="Center"/>
-                        </StackPanel>
-                    </Button>
-                <Button Grid.Column="4" x:Name="btnAirTable" Click="BtnAirTable_Click" Width="90" Height="90" 
+                    <Button Grid.Column="5" x:Name="btnSafetyFences" Click="BtnSafetyFences_Click" Width="90" Height="90" 
                         Background="#FFD9D9D9" VerticalContentAlignment="Bottom" 
                         FontWeight="Bold" FontSize="16" Margin="5,5,5,5">
-                    <StackPanel Orientation="Vertical">
-                        <Image Source="/Media/AirTable.png" RenderTransformOrigin="0.5,0.5" Width="53" Height="53" >
-                            <Image.RenderTransform>
-                                <TransformGroup>
-                                    <ScaleTransform/>
-                                    <SkewTransform/>
-                                    <RotateTransform Angle="-90"/>
-                                    <TranslateTransform/>
-                                </TransformGroup>
-                            </Image.RenderTransform>
-                        </Image>
-                        <Label Content="Air Table" Margin="0,-2,0,0"/>
-                    </StackPanel>
-                </Button>
-                <Button Grid.Column="5" x:Name="btnSafetyFences" Click="BtnSafetyFences_Click" Width="90" Height="90" 
-                    Background="#FFD9D9D9" VerticalContentAlignment="Bottom" 
-                    FontWeight="Bold" FontSize="16" Margin="5,5,5,5">
-                    <StackPanel Orientation="Vertical">
-                        <Image Source="/Media/SafetyFences.png" RenderTransformOrigin="0.5,0.5" Width="53" Height="53" />
-                        <Label Content="Fences" Margin="0,-2,0,0"/>
-                    </StackPanel>
-                </Button>
+                        <StackPanel Orientation="Vertical">
+                            <Image Source="/Media/SafetyFences.png" RenderTransformOrigin="0.5,0.5" Width="53" Height="53" />
+                            <Label Content="Fences" Margin="0,-2,0,0"/>
+                        </StackPanel>
+                    </Button>
+                </Grid>
+                <!-- Right Side - Emergency Buttons -->
+                <StackPanel x:Name="EmergencyButtons" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" 
+                            VerticalAlignment="Center" Margin="0,0,5,0">
+                    <TextBlock x:Name="AppVersion" Text="v0.50" VerticalAlignment="Bottom"/>
+                    <Button x:Name="btnEmergencyReset" Click="BtnEmergencyReset_Click" Width="90" Height="90" 
+                            Margin="5" Background="#FFD9D9D9" VerticalContentAlignment="Bottom" 
+                            FontWeight="Bold" FontSize="16">
+                        <StackPanel Orientation="Vertical">
+                            <Image Source="/Media/EmergencyReset.png" Stretch="None" VerticalAlignment="Top" 
+                                   HorizontalAlignment="Center"/>
+                            <Label Content="F11" Margin="0,-2,0,0" HorizontalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Button x:Name="btnEmergency" Click="BtnEmergency_Click" Width="90" Height="90" 
+                            Margin="5" Background="#FFD9D9D9" VerticalContentAlignment="Bottom" 
+                            FontWeight="Bold" FontSize="16">
+                        <StackPanel Orientation="Vertical">
+                            <Image Source="/Media/Emergency.png" Stretch="None" VerticalAlignment="Top" 
+                                   HorizontalAlignment="Center"/>
+                            <Label Content="F12" Margin="0,-2,0,0" HorizontalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
             </Grid>
-            <!-- Right Side - Emergency Buttons -->
-            <StackPanel x:Name="EmergencyButtons" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" 
-                        VerticalAlignment="Center" Margin="0,0,5,0">
-                
-                <Button x:Name="btnEmergencyReset" Click="BtnEmergencyReset_Click" Width="90" Height="90" 
-                        Margin="5" Background="#FFD9D9D9" VerticalContentAlignment="Bottom" 
-                        FontWeight="Bold" FontSize="16">
-                    <StackPanel Orientation="Vertical">
-                        <Image Source="/Media/EmergencyReset.png" Stretch="None" VerticalAlignment="Top" 
-                               HorizontalAlignment="Center"/>
-                        <Label Content="F11" Margin="0,-2,0,0" HorizontalAlignment="Center"/>
-                    </StackPanel>
-                </Button>
 
-                <Button x:Name="btnEmergency" Click="BtnEmergency_Click" Width="90" Height="90" 
-                        Margin="5" Background="#FFD9D9D9" VerticalContentAlignment="Bottom" 
-                        FontWeight="Bold" FontSize="16">
-                    <StackPanel Orientation="Vertical">
-                        <Image Source="/Media/Emergency.png" Stretch="None" VerticalAlignment="Top" 
-                               HorizontalAlignment="Center"/>
-                        <Label Content="F12" Margin="0,-2,0,0" HorizontalAlignment="Center"/>
-                    </StackPanel>
-                </Button>
-            </StackPanel>
         </Grid>
-
-    </Grid>
+    </Viewbox>
 </Window>

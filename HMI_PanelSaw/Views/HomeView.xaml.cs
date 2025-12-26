@@ -8,6 +8,7 @@ using System.Windows.Threading;
 using HMI_PanelSaw.Models;
 using System.IO;
 using Microsoft.Win32;
+using HMI_PanelSaw.Model;
 
 namespace HMI_PanelSaw.Views
 {
@@ -40,6 +41,11 @@ namespace HMI_PanelSaw.Views
                 _adsService.AddVariable("GVL_HMI.bSafetyFencesClosed");
                 _adsService.AddVariable("GVL_HMI.bPusherClampActive");
                 _adsService.AddVariable("GVL_HMI.rPusherFencePosition");
+                _adsService.AddVariable("GVL_HMI.bMainSawActive");
+                _adsService.AddVariable("GVL_HMI.bScoringSawActive");
+                _adsService.AddVariable("GVL_HMI.bAirTablesActive");
+                _adsService.AddVariable("PRG_MACHINE.fbPusherClamp.eState");
+                _adsService.AddVariable("PRG_MACHINE.fbPressureBeam.eState");
                 for (int i = 1; i <= MAX_CUTS; i++)
                 {
                     _adsService.AddVariable($"GVL_HMI.arCutList[{i}]");
@@ -54,16 +60,26 @@ namespace HMI_PanelSaw.Views
         {
             try
             {
-                lblTotalCut.Content = _adsService.Read<short>("GVL_HMI.nTotalCut").ToString();
-                lblSafetyFence.Content = _adsService.Read<bool>("GVL_HMI.bSafetyFencesClosed") ? "Closed" : "Open";
-                lblPusherClamp.Content = _adsService.Read<bool>("GVL_HMI.bPusherClampActive") ? "Closed" : "Open";
-                lblPusherPosition.Content = _adsService.Read<float>("GVL_HMI.rPusherFencePosition").ToString("F2");
+                txtPusherFencePosition.Text = _adsService.Read<float>("GVL_HMI.rPusherFencePosition").ToString("F2");
+                PusherClampState clampState = (PusherClampState)_adsService.Read<short>("PRG_MACHINE.fbPusherClamp.eState");
+                txtPusherClampStatus.Text = clampState.ToString();
+                PressureBeamState pressureBeamState = (PressureBeamState)_adsService.Read<short>("PRG_MACHINE.fbPressureBeam.eState");
+                txtPressureBeamStatus.Text = pressureBeamState.ToString();
+                txtSafetyFence.Text = _adsService.Read<bool>("GVL_HMI.bSafetyFencesClosed") ? "Closed" : "Open";
+                txtAirTable.Text = _adsService.Read<bool>("GVL_HMI.bAirTablesActive") ? "Active" : "Inactive";
+
+
+                txtTotalCut.Text = _adsService.Read<short>("GVL_HMI.nTotalCut").ToString();
+                txtCurrentCutIndex.Text = _adsService.Read<short>("GVL_HMI.nCurrentCutIndex").ToString();
+
                 txtPanelLength.Text = _adsService.Read<float>("GVL_Parameters.stPanelData.rPanelLength").ToString("F2");
                 txtPanelWidth.Text = _adsService.Read<float>("GVL_Parameters.stPanelData.rPanelWidth").ToString("F2");
                 txtPanelThickness.Text = _adsService.Read<float>("GVL_Parameters.stPanelData.rPanelThickness").ToString("F2");
+                
                 txtMainSawStatus.Text = _adsService.Read<bool>("GVL_HMI.bMainSawActive") ? "On" : "Off";
                 txtScoringSawStatus.Text = _adsService.Read<bool>("GVL_HMI.bScoringSawActive") ? "On" : "Off";
-                txtCurrentCut.Text = _adsService.Read<short>("GVL_HMI.nCurrentCutIndex").ToString();
+                
+
             }
             catch (Exception ex)
             {
