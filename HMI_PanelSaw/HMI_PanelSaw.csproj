@@ -129,6 +129,8 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Model\CutData.cs" />
+    <Compile Include="Model\PressureBeamState.cs" />
+    <Compile Include="Model\PusherClampState.cs" />
     <Compile Include="Service\AdsService.cs" />
     <Compile Include="Views\HomeView.xaml.cs">
       <DependentUpon>HomeView.xaml</DependentUpon>

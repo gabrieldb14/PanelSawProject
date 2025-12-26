@@ -17,8 +17,11 @@ namespace HMI_PanelSaw
 
         private HomeView _homeView;
         private ParametersView _parametersView;
+        private bool _isHomeViewActive;
+        private bool _isParametersViewActive;
 
         private static readonly System.Windows.Media.SolidColorBrush ActiveBrush = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(100, 181, 246));
+        private static readonly System.Windows.Media.SolidColorBrush EmergencyBrush = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(255, 38, 38));
         private static readonly System.Windows.Media.SolidColorBrush InactiveBrush = System.Windows.Media.Brushes.LightGray;
 
         public MainWindow()
@@ -79,7 +82,9 @@ namespace HMI_PanelSaw
                 btnSafetyFences.Background = safetyFences ? ActiveBrush : InactiveBrush;
                 btnStartCycle.Background = machineState >= 1 && machineState <= 3 ? ActiveBrush: InactiveBrush;
                 btnStopCycle.Background = machineState == 4 ? ActiveBrush: InactiveBrush ;
-                btnEmergency.Background = machineState == 999 ? ActiveBrush : InactiveBrush;
+                btnEmergency.Background = machineState == 999 ? EmergencyBrush : InactiveBrush;
+                btnHome.Background =  _isHomeViewActive ? ActiveBrush : InactiveBrush;
+                btnParameters.Background =  _isParametersViewActive ? ActiveBrush : InactiveBrush;
             }
             catch (Exception)
             {
@@ -91,7 +96,9 @@ namespace HMI_PanelSaw
             if (_homeView == null)
                 _homeView = new HomeView(_adsClient);
             ContentArea.Content = _homeView;
-            HighlightButton(btnHome);
+            _isParametersViewActive = false;
+            _isHomeViewActive = true;
+            //HighlightButton(btnHome);
         }
         private void NavigateToParameters()
         {
@@ -99,7 +106,9 @@ namespace HMI_PanelSaw
                 _parametersView = new ParametersView(_adsClient);
 
             ContentArea.Content = _parametersView;
-            HighlightButton(btnParameters);
+            _isHomeViewActive = false;
+            _isParametersViewActive = true;
+            //HighlightButton(btnParameters);
         }
         
         private void HighlightButton(System.Windows.Controls.Button activeButton)
