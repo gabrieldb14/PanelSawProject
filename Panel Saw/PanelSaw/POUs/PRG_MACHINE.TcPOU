@@ -50,14 +50,14 @@ END_IF
 
 fbPressureBeam(
     bEnable := TRUE,
-    bLowerCommand := stMachineControl.bPressureBeamLower OR GVL_HMI.bPressureBeamCommand,
-    bRaiseCommand := stMachineControl.bPressureBeamRaise OR (NOT GVL_HMI.bPressureBeamCommand)
+    bLowerCommand := stMachineControl.bPressureBeamLower OR (GVL_HMI.bPressureBeamCommand AND nInternState = 0),
+    bRaiseCommand := stMachineControl.bPressureBeamRaise OR ((NOT GVL_HMI.bPressureBeamCommand) AND nInternState = 0)
 );
 
 fbPusherClamp(
     bEnable := TRUE,
-    bClampCommand := stMachineControl.bClamp OR GVL_HMI.bPusherClampCommand,
-    bUnclampCommand := stMachineControl.bUnclamp OR (NOT GVL_HMI.bPusherClampCommand),
+    bClampCommand := stMachineControl.bClamp OR (GVL_HMI.bPusherClampCommand AND nInternState = 0),
+    bUnclampCommand := stMachineControl.bUnclamp OR ((NOT GVL_HMI.bPusherClampCommand) AND nInternState = 0),
     rTargetPosition := GVL_HMI.rPusherTargetPosition,
     rCurrentPosition := GVL_HMI.rPusherFencePosition
 );
