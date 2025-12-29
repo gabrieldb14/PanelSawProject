@@ -1,6 +1,7 @@
 ﻿using HMI_PanelSaw.Service;
 using HMI_PanelSaw.Views;
 using System;
+using System.Configuration;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -29,6 +30,7 @@ namespace HMI_PanelSaw
             InitComms();
             InitializeComponent();
 
+            int pollingInterval = GetConfigValue("PlcPollingInterval", 100);
             _timerCommunication = new DispatcherTimer();
             _timerCommunication.Interval = TimeSpan.FromMilliseconds(100);
             _timerCommunication.Tick += PLCReadCycle;
@@ -38,7 +40,18 @@ namespace HMI_PanelSaw
         }
         private void InitComms()
         {
-            _adsClient.Connect("192.168.2.108.1.1", 851);
+            string adsNetId = ConfigurationManager.AppSettings["AdsNetId"];
+            string adsPortStr = ConfigurationManager.AppSettings["AdsPort"];
+            if (string.IsNullOrEmpty(adsNetId))
+            {
+                throw new ConfigurationErrorsException("AdsNetId is not configured in App.config");
+            }
+            if (string.IsNullOrEmpty(adsPortStr) || !int.TryParse(adsPortStr, out int adsPort))
+            {
+                throw new ConfigurationErrorsException("AdsPort is not configured or invalid in App.config");
+            }
+            _adsClient.Connect(adsNetId, adsPort);
+
 
             //Variables for handle creation
             _adsClient.AddVariable("GVL_HMI.sStateDescription");
@@ -51,7 +64,16 @@ namespace HMI_PanelSaw
             _adsClient.AddVariable("GVL_HMI.nMachineState");
 
         }
-        
+        private int GetConfigValue(string key, int defaultValue)
+        {
+            string value = ConfigurationManager.AppSettings[key];
+            if (string.IsNullOrEmpty(value) || !int.TryParse(value, out int result))
+            {
+                return defaultValue;
+            }
+            return result;
+        }
+
         private void PLCReadCycle(object sender, EventArgs e)
         {
             if (!_adsClient.IsConnected) return;

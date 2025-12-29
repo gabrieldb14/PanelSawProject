@@ -15,6 +15,7 @@ x86/
 [Bb]in/
 [Oo]bj/
 [Ll]og/
+App.config
 
 # Visual Studio cache/options
 .vscode/

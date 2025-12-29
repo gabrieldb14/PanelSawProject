@@ -5,6 +5,8 @@
 * Implemented proper IDisposable pattern for AdsService
 * Input validation in Parameters View
 * IsLoaded verification in HomeView to prevent timer to keep running while it is unloaded
+* AppSettings for Ip and Port, with method to read from App.Settings
+* App.Settings.Example
 
 ## Fixed
 
@@ -13,7 +15,8 @@
 
 ## Removed
 
-*
+* Hardcoded Ip and Port in MainWindow code
+* App.Settings
 
 # [v0.5] - 12/23/25
 
