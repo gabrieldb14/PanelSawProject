@@ -8,7 +8,6 @@ using System.Windows.Threading;
 using HMI_PanelSaw.Models;
 using System.IO;
 using Microsoft.Win32;
-using HMI_PanelSaw.Model;
 
 namespace HMI_PanelSaw.Views
 {

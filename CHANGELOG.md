@@ -6,7 +6,8 @@
 
 ## Fixed
 
-*
+* Handles added in Home and Parameters views
+* Inconsistency in namespace HMI_PanelSaw.Models
 
 ## Removed
 

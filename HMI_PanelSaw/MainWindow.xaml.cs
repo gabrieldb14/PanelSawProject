@@ -98,7 +98,6 @@ namespace HMI_PanelSaw
             ContentArea.Content = _homeView;
             _isParametersViewActive = false;
             _isHomeViewActive = true;
-            //HighlightButton(btnHome);
         }
         private void NavigateToParameters()
         {
@@ -108,16 +107,8 @@ namespace HMI_PanelSaw
             ContentArea.Content = _parametersView;
             _isHomeViewActive = false;
             _isParametersViewActive = true;
-            //HighlightButton(btnParameters);
         }
         
-        private void HighlightButton(System.Windows.Controls.Button activeButton)
-        {
-            btnHome.Background = System.Windows.Media.Brushes.LightGray;
-            btnParameters.Background = System.Windows.Media.Brushes.LightGray;
-
-            activeButton.Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(100, 181, 246));
-        }
         private void BtnStartCycle_Click(object sender, RoutedEventArgs e)
         {
             var startCycle = _adsClient.Read<bool>("GVL_HMI.bStartCycle");
@@ -197,8 +188,19 @@ namespace HMI_PanelSaw
         }
         protected override void OnClosed(EventArgs e)
         {
-            _adsClient.Disconnect();
-            base.OnClosed(e);
+            try
+            {
+                _timerCommunication?.Stop();
+                _adsClient?.Dispose();
+            }
+            catch(Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error during cleanup: {ex.Message}");
+            }
+            finally
+            {
+                base.OnClosed(e);
+            }
         }
 
 

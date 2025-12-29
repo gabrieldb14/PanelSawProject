@@ -1,4 +1,4 @@
-﻿namespace HMI_PanelSaw.Model
+﻿namespace HMI_PanelSaw.Models
 {
     public enum PressureBeamState : short
     {
