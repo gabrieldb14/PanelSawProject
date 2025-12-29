@@ -31,7 +31,26 @@ namespace HMI_PanelSaw.Views
             _timerCommunication.Interval = TimeSpan.FromMilliseconds(100);
             _timerCommunication.Tick += LoadParametersFromPLC;
             _timerCommunication.Start();
+
+            this.Loaded += HomeView_Loaded;
+            this.Unloaded += HomeView_Unloaded;
         }
+
+        private void HomeView_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (_timerCommunication != null && !_timerCommunication.IsEnabled)
+            {
+                _timerCommunication.Start();
+            }
+        }
+        private void HomeView_Unloaded(object sender, RoutedEventArgs e)
+        {
+            if (_timerCommunication != null && _timerCommunication.IsEnabled)
+            {
+                _timerCommunication.Stop();
+            }
+        }
+
         private void InitializeParameterHandles()
         {
             try
@@ -61,6 +80,7 @@ namespace HMI_PanelSaw.Views
         }
         private void LoadParametersFromPLC(object sender, EventArgs e)
         {
+            if (!this.IsLoaded || _adsService == null || !_adsService.IsConnected) return;
             try
             {
                 txtPusherFencePosition.Text = _adsService.Read<float>("GVL_HMI.rPusherFencePosition").ToString("F2");
@@ -86,7 +106,11 @@ namespace HMI_PanelSaw.Views
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error loading parameters {ex.Message}", "Loading Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                if (this.IsLoaded)
+                {
+                    MessageBox.Show($"Error loading parameters: {ex.Message}",
+                        "Loading Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
         }
         private void LoadCutListFromPLC()

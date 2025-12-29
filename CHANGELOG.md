@@ -4,6 +4,7 @@
 
 * Implemented proper IDisposable pattern for AdsService
 * Input validation in Parameters View
+* IsLoaded verification in HomeView to prevent timer to keep running while it is unloaded
 
 ## Fixed
 
