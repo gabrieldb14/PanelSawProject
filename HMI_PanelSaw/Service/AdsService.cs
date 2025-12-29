@@ -7,10 +7,11 @@ using TwinCAT.Ads;
 
 namespace HMI_PanelSaw.Service
 {
-    public class AdsService
+    public class AdsService : IDisposable
     {
         private AdsClient _adsClient;
         private Dictionary<string, uint> _handles;
+        private bool _disposed = false;
 
         public AdsService()
         {
@@ -20,6 +21,7 @@ namespace HMI_PanelSaw.Service
 
         public void Connect(string amsNetId, int port)
         {
+            CheckDisposed();
             if (!_adsClient.IsConnected)
             {
                 _adsClient.Connect(amsNetId, port);
@@ -104,5 +106,45 @@ namespace HMI_PanelSaw.Service
             }
         }
         public bool IsConnected => _adsClient.IsConnected;
+
+        private void CheckDisposed()
+        {
+            if (_disposed)
+            {
+                throw new ObjectDisposedException(nameof(AdsService));
+            }
+        }
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                    Disconnect();
+                    if(_adsClient != null)
+                    {
+                        _adsClient.Dispose();
+                        _adsClient = null;
+                    }
+                    if(_handles != null)
+                    {
+                        _handles.Clear();
+                        _handles = null;
+                    }
+                }
+                _disposed = true;
+            }
+        }
+        ~AdsService()
+        {
+            Dispose(false);
+        }
+
+
     }
 }
