@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,6 +21,12 @@ namespace HMI_PanelSaw.Views
     public partial class ParametersView : UserControl
     {
         private AdsService _adsService;
+        private const float MIN_PANEL_DIMENSION = 10f;     
+        private const float MAX_PANEL_DIMENSION = 5000f;    
+        private const float MIN_BLADE_DIAMETER = 100f;      
+        private const float MAX_BLADE_DIAMETER = 600f;      
+        private const float MIN_BLADE_THICKNESS = 1f;       
+        private const float MAX_BLADE_THICKNESS = 10f;      
 
         public ParametersView(AdsService adsService)
         {
@@ -66,26 +73,73 @@ namespace HMI_PanelSaw.Views
                 MessageBox.Show($"Error loading parameters from PLC {ex.Message}", "Loading error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+        private bool TryParseAndValidate(string input, string parameterName, float min, float max, out float result)
+        {
+            result = 0f;
+
+            if (!float.TryParse(input, NumberStyles.Float, CultureInfo.InvariantCulture, out result))
+            {
+                MessageBox.Show($"Invalid value for {parameterName}.\nPlease enter a valid number.",
+                    "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return false;
+            }
+
+            if (result < min || result > max)
+            {
+                MessageBox.Show($"{parameterName} must be between {min:F2} mm and {max:F2} mm.\nEntered value: {result:F2} mm",
+                    "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return false;
+            }
+
+            return true;
+        }
+
         private void SaveParametersToPLC()
         {
             try
             {
-                if (!_adsService.IsConnected) return;
-                _adsService.Write("GVL_Parameters.stPanelData.rPanelLength", float.Parse(txtPanelLength.Text));
-                _adsService.Write("GVL_Parameters.stPanelData.rPanelWidth", float.Parse(txtPanelWidth.Text));
-                _adsService.Write("GVL_Parameters.stPanelData.rPanelThickness", float.Parse(txtPanelThickness.Text));
+                if (!_adsService.IsConnected)
+                {
+                    MessageBox.Show("Not connected to PLC. Please check the connection.",
+                        "Connection Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+                if (!TryParseAndValidate(txtPanelLength.Text, "Panel Length", MIN_PANEL_DIMENSION, MAX_PANEL_DIMENSION, out float panelLength))
+                    return;
 
-                _adsService.Write("GVL_Parameters.stMainBlade.rBladeDiameter", float.Parse(txtMainBladeDiameter.Text));
-                _adsService.Write("GVL_Parameters.stMainBlade.rBladeThickness", float.Parse(txtMainBladeThickness.Text));
+                if (!TryParseAndValidate(txtPanelWidth.Text, "Panel Width", MIN_PANEL_DIMENSION, MAX_PANEL_DIMENSION, out float panelWidth))
+                    return;
 
-                _adsService.Write("GVL_Parameters.stScoringBlade.rBladeDiameter", float.Parse(txtScoringBladeDiameter.Text));
-                _adsService.Write("GVL_Parameters.stScoringBlade.rBladeThickness", float.Parse(txtScoringBladeThickness.Text));
+                if (!TryParseAndValidate(txtPanelThickness.Text, "Panel Thickness", MIN_BLADE_THICKNESS, 100f, out float panelThickness))
+                    return;
+                if (!TryParseAndValidate(txtMainBladeDiameter.Text, "Main Blade Diameter", MIN_BLADE_DIAMETER, MAX_BLADE_DIAMETER, out float mainBladeDiameter))
+                    return;
 
-                MessageBox.Show("Parameters saved successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                if (!TryParseAndValidate(txtMainBladeThickness.Text, "Main Blade Thickness", MIN_BLADE_THICKNESS, MAX_BLADE_THICKNESS, out float mainBladeThickness))
+                    return;
+                if (!TryParseAndValidate(txtScoringBladeDiameter.Text, "Scoring Blade Diameter", MIN_BLADE_DIAMETER, MAX_BLADE_DIAMETER, out float scoringBladeDiameter))
+                    return;
+
+                if (!TryParseAndValidate(txtScoringBladeThickness.Text, "Scoring Blade Thickness", MIN_BLADE_THICKNESS, MAX_BLADE_THICKNESS, out float scoringBladeThickness))
+                    return;
+
+                _adsService.Write("GVL_Parameters.stPanelData.rPanelLength", panelLength);
+                _adsService.Write("GVL_Parameters.stPanelData.rPanelWidth", panelWidth);
+                _adsService.Write("GVL_Parameters.stPanelData.rPanelThickness", panelThickness);
+
+                _adsService.Write("GVL_Parameters.stMainBlade.rBladeDiameter", mainBladeDiameter);
+                _adsService.Write("GVL_Parameters.stMainBlade.rBladeThickness", mainBladeThickness);
+
+                _adsService.Write("GVL_Parameters.stScoringBlade.rBladeDiameter", scoringBladeDiameter);
+                _adsService.Write("GVL_Parameters.stScoringBlade.rBladeThickness", scoringBladeThickness);
+
+                MessageBox.Show("Parameters saved successfully!",
+                    "Success", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error saving parameters to PLC {ex.Message}", "Saving error",MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Error saving parameters to PLC: {ex.Message}\n\nPlease check the connection and try again.",
+                    "Saving Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 

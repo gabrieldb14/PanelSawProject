@@ -3,6 +3,7 @@
 ## Added
 
 * Implemented proper IDisposable pattern for AdsService
+* Input validation in Parameters View
 
 ## Fixed
 
