@@ -32,7 +32,7 @@ namespace HMI_PanelSaw
 
             int pollingInterval = GetConfigValue("PlcPollingInterval", 100);
             _timerCommunication = new DispatcherTimer();
-            _timerCommunication.Interval = TimeSpan.FromMilliseconds(100);
+            _timerCommunication.Interval = TimeSpan.FromMilliseconds(pollingInterval);
             _timerCommunication.Tick += PLCReadCycle;
             _timerCommunication.Start();
 
