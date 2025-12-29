@@ -43,6 +43,7 @@ _ReSharper*/
 _IECst/
 _CompileInfo/
 _Libraries/
+_Boot
 *.tpy
 *.tmc
 *.compiled-library

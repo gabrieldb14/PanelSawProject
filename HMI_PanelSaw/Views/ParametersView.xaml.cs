@@ -37,6 +37,10 @@ namespace HMI_PanelSaw.Views
 
                 _adsService.AddVariable("GVL_Parameters.stScoringBlade.rBladeDiameter");
                 _adsService.AddVariable("GVL_Parameters.stScoringBlade.rBladeThickness");
+
+                _adsService.AddVariable("GVL_Parameters.stPanelData.rPanelLength");
+                _adsService.AddVariable("GVL_Parameters.stPanelData.rPanelWidth");
+                _adsService.AddVariable("GVL_Parameters.stPanelData.rPanelThickness");
             }
             catch(Exception ex)
             {
