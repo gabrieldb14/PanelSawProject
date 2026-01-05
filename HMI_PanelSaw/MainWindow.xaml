@@ -130,7 +130,7 @@
                 <!-- Right Side - Emergency Buttons -->
                 <StackPanel x:Name="EmergencyButtons" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" 
                             VerticalAlignment="Center" Margin="0,0,5,0">
-                    <TextBlock x:Name="AppVersion" Text="v0.61" VerticalAlignment="Bottom"/>
+                    <TextBlock x:Name="AppVersion" Text="v0.62" VerticalAlignment="Bottom"/>
                     <Button x:Name="btnEmergencyReset" Click="BtnEmergencyReset_Click" Width="90" Height="90" 
                             Margin="5" Background="#FFD9D9D9" VerticalContentAlignment="Bottom" 
                             FontWeight="Bold" FontSize="16">

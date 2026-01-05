@@ -21,6 +21,7 @@ namespace HMI_PanelSaw
         private ParametersView _parametersView;
         private bool _isHomeViewActive;
         private bool _isParametersViewActive;
+        private bool _isInitialized = false;
 
         private static readonly System.Windows.Media.SolidColorBrush ActiveBrush = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(100, 181, 246));
         private static readonly System.Windows.Media.SolidColorBrush EmergencyBrush = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(255, 38, 38));
@@ -28,6 +29,21 @@ namespace HMI_PanelSaw
 
         public MainWindow(AuthService authService)
         {
+            try
+            {
+                InitializeComponent();
+                _authService = authService;
+                InitComms();
+                InitializeTimer();
+                NavigateToHome();
+                _isInitialized = true;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Failed to Initialize application: {ex.Message}","Initialization Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                _isInitialized = false;
+            }
+            /*
             InitComms();
             InitializeComponent();
             _authService = authService;
@@ -37,6 +53,7 @@ namespace HMI_PanelSaw
             _timerCommunication.Tick += PLCReadCycle;
             _timerCommunication.Start();
             NavigateToHome();
+            */
 
         }
         private void InitComms()
@@ -51,19 +68,44 @@ namespace HMI_PanelSaw
             {
                 throw new ConfigurationErrorsException("AdsPort is not configured or invalid in App.config");
             }
-            _adsClient.Connect(adsNetId, adsPort);
+            _adsClient = new AdsService();
+            try
+            {
+                _adsClient.Connect(adsNetId, adsPort);
+                InitializePlcVariables();
+            }
+            catch (Exception ex)
+            {
+                _adsClient?.Dispose();
+                throw new Exception($"Failed to connect to PLC: {ex.Message}", ex);
+            }
 
-
+        }
+        private void InitializePlcVariables()
+        {
             //Variables for handle creation
-            _adsClient.AddVariable("GVL_HMI.sStateDescription");
-            _adsClient.AddVariable("GVL_HMI.bStartCycle");
-            _adsClient.AddVariable("GVL_HMI.bStopCycle");
-            _adsClient.AddVariable("GVL_HMI.bEmergencyButton");
-            _adsClient.AddVariable("GVL_HMI.bEmergencyResetButton");
-            _adsClient.AddVariable("GVL_HMI.bSafetyFencesClosed");
-            _adsClient.AddVariable("GVL_HMI.bAirTablesActive");
-            _adsClient.AddVariable("GVL_HMI.nMachineState");
-
+            var variables = new[]
+            {
+                "GVL_HMI.sStateDescription",
+                "GVL_HMI.bStartCycle",
+                "GVL_HMI.bStopCycle",
+                "GVL_HMI.bEmergencyButton",
+                "GVL_HMI.bEmergencyResetButton",
+                "GVL_HMI.bSafetyFencesClosed",
+                "GVL_HMI.bAirTablesActive",
+                "GVL_HMI.nMachineState"
+            };
+            foreach (var variable in variables)
+            {
+                try
+                {
+                    _adsClient.AddVariable(variable);
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception($"Failed to add variable {variable}: {ex.Message}", ex);
+                }
+            }
         }
         private int GetConfigValue(string key, int defaultValue)
         {
@@ -77,30 +119,46 @@ namespace HMI_PanelSaw
 
         private void PLCReadCycle(object sender, EventArgs e)
         {
-            if (!_adsClient.IsConnected) return;
-            try
             {
-                string stateDescription = _adsClient.Read<string>("GVL_HMI.sStateDescription");
-                
-                txtStatus.Text = string.Empty;
-                txtStatus.InvalidateVisual();
-                txtStatus.Text = stateDescription;
-                ButtonActive();
+                if (!_isInitialized || _adsClient?.IsConnected != true) return;
+
+                try
+                {
+                    string stateDescription = _adsClient.Read<string>("GVL_HMI.sStateDescription");
+
+                    Dispatcher.Invoke(() =>
+                    {
+                        txtStatus.Text = stateDescription ?? "No Status";
+                        ButtonActive();
+                    });
+                }
+                catch (Exception ex)
+                {
+                    Dispatcher.Invoke(() =>
+                    {
+                        txtStatus.Text = $"ERROR: {ex.Message}";
+                    });
+                }
             }
-            catch (Exception ex)
-            {
-                txtStatus.Text = string.Empty;
-                txtStatus.InvalidateVisual();
-                txtStatus.Text = $"ERROR: {ex.Message}";
-            }
+        }
+        private void InitializeTimer()
+        {
+            int pollingInterval = GetConfigValue("PlcPollingInterval", 100);
+            _timerCommunication = new DispatcherTimer();
+            _timerCommunication.Interval = TimeSpan.FromMilliseconds(pollingInterval);
+            _timerCommunication.Tick += PLCReadCycle;
+            _timerCommunication.Start();
         }
         private void ButtonActive()
         {
+            if (!_isInitialized || _adsClient?.IsConnected != true) return;
+
             try
             {   
                 bool airTable = _adsClient.Read<bool>("GVL_HMI.bAirTablesActive");
                 bool safetyFences = _adsClient.Read<bool>("GVL_HMI.bSafetyFencesClosed");
                 short machineState = _adsClient.Read<short>("GVL_HMI.nMachineState");
+
                 btnAirTable.Background = airTable ? ActiveBrush : InactiveBrush;
                 btnSafetyFences.Background = safetyFences ? ActiveBrush : InactiveBrush;
                 btnStartCycle.Background = machineState >= 1 && machineState <= 3 ? ActiveBrush: InactiveBrush;
@@ -134,27 +192,67 @@ namespace HMI_PanelSaw
         
         private void BtnStartCycle_Click(object sender, RoutedEventArgs e)
         {
-            var startCycle = _adsClient.Read<bool>("GVL_HMI.bStartCycle");
-            _adsClient.Write("GVL_HMI.bStartCycle",!startCycle);
+            if (!_isInitialized || _adsClient?.IsConnected != true) return;
+
+            try
+            {
+                var startCycle = _adsClient.Read<bool>("GVL_HMI.bStartCycle");
+                _adsClient.Write("GVL_HMI.bStartCycle", !startCycle);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error controlling start cycle: {ex.Message}", "Control Error",
+                    MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
         }
 
         private void BtnStopCycle_Click(object sender, RoutedEventArgs e)
         {
-            var stopCycle = _adsClient.Read<bool>("GVL_HMI.bStopCycle");
-            _adsClient.Write("GVL_HMI.bStopCycle", !stopCycle);
+            if (!_isInitialized || _adsClient?.IsConnected != true) return;
+
+            try
+            {
+                var stopCycle = _adsClient.Read<bool>("GVL_HMI.bStopCycle");
+                _adsClient.Write("GVL_HMI.bStopCycle", !stopCycle);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error controlling stop cycle: {ex.Message}", "Control Error",
+                    MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
         }
         private async void BtnEmergencyReset_Click(object sender, RoutedEventArgs e)
         {
-            _adsClient.Write("GVL_HMI.bEmergencyResetButton", true);
-            await Task.Delay(100);
-            _adsClient.Write("GVL_HMI.bEmergencyResetButton", false);
+            if (!_isInitialized || _adsClient?.IsConnected != true) return;
+
+            try
+            {
+                _adsClient.Write("GVL_HMI.bEmergencyResetButton", true);
+                await Task.Delay(100);
+                _adsClient.Write("GVL_HMI.bEmergencyResetButton", false);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error during emergency reset: {ex.Message}", "Emergency Control Error",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private async void BtnEmergency_Click(object sender, RoutedEventArgs e)
         {
-            _adsClient.Write("GVL_HMI.bEmergencyButton", true);
-            await Task.Delay(100);
-            _adsClient.Write("GVL_HMI.bEmergencyButton", false);
+            if (!_isInitialized || _adsClient?.IsConnected != true) return;
+
+            try
+            {
+                _adsClient.Write("GVL_HMI.bEmergencyButton", true);
+                await Task.Delay(100);
+                _adsClient.Write("GVL_HMI.bEmergencyButton", false);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error during emergency stop: {ex.Message}", "Emergency Control Error",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void BtnHome_Click(object sender, RoutedEventArgs e)
@@ -168,13 +266,33 @@ namespace HMI_PanelSaw
         }
         private void BtnAirTable_Click(object sender, RoutedEventArgs e)
         {
-            var airTable = _adsClient.Read<bool>("GVL_HMI.bAirTablesActive");
-            _adsClient.Write("GVL_HMI.bAirTablesActive", !airTable);
+            if (!_isInitialized || _adsClient?.IsConnected != true) return;
+
+            try
+            {
+                var airTable = _adsClient.Read<bool>("GVL_HMI.bAirTablesActive");
+                _adsClient.Write("GVL_HMI.bAirTablesActive", !airTable);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error controlling air table: {ex.Message}", "Control Error",
+                    MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
         }
         private void BtnSafetyFences_Click(object sender, RoutedEventArgs e)
         {
-            var safetyFences = _adsClient.Read<bool>("GVL_HMI.bSafetyFencesClosed");
-            _adsClient.Write("GVL_HMI.bSafetyFencesClosed", !safetyFences);
+            if (!_isInitialized || _adsClient?.IsConnected != true) return;
+
+            try
+            {
+                var safetyFences = _adsClient.Read<bool>("GVL_HMI.bSafetyFencesClosed");
+                _adsClient.Write("GVL_HMI.bSafetyFencesClosed", !safetyFences);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error controlling safety fences: {ex.Message}", "Control Error",
+                    MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
         }
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
@@ -213,10 +331,25 @@ namespace HMI_PanelSaw
         {
             try
             {
-                _timerCommunication?.Stop();
+                if (_timerCommunication != null)
+                {
+                    _timerCommunication.Stop();
+                    _timerCommunication = null;
+                }
+                if (_homeView is IDisposable disposableHome)
+                {
+                    disposableHome.Dispose();
+                }
+
+                if (_parametersView is IDisposable disposableParams)
+                {
+                    disposableParams.Dispose();
+                }
                 _adsClient?.Dispose();
+                _adsClient = null;
+                _authService?.Dispose();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine($"Error during cleanup: {ex.Message}");
             }

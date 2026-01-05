@@ -1,3 +1,16 @@
+# [v0.62] - 01/05/2026
+
+## Added
+
+* Thread Safety
+
+## Fixed
+
+* Double Disposal bug
+* Deprecated API Usage
+* Improved error handling
+
+
 # [v0.61] - 01/05/2026
 
 ## Added
