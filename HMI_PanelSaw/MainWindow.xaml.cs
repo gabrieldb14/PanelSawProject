@@ -13,6 +13,7 @@ namespace HMI_PanelSaw
 
     public partial class MainWindow : Window
     {
+        private readonly AuthService _authService;
         private AdsService _adsClient = new AdsService();
         private DispatcherTimer _timerCommunication;
 
@@ -25,18 +26,18 @@ namespace HMI_PanelSaw
         private static readonly System.Windows.Media.SolidColorBrush EmergencyBrush = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(255, 38, 38));
         private static readonly System.Windows.Media.SolidColorBrush InactiveBrush = System.Windows.Media.Brushes.LightGray;
 
-        public MainWindow()
+        public MainWindow(AuthService authService)
         {
             InitComms();
             InitializeComponent();
-
+            _authService = authService;
             int pollingInterval = GetConfigValue("PlcPollingInterval", 100);
             _timerCommunication = new DispatcherTimer();
             _timerCommunication.Interval = TimeSpan.FromMilliseconds(pollingInterval);
             _timerCommunication.Tick += PLCReadCycle;
             _timerCommunication.Start();
-
             NavigateToHome();
+
         }
         private void InitComms()
         {
@@ -124,7 +125,7 @@ namespace HMI_PanelSaw
         private void NavigateToParameters()
         {
             if (_parametersView == null)
-                _parametersView = new ParametersView(_adsClient);
+                _parametersView = new ParametersView(_adsClient, _authService);
 
             ContentArea.Content = _parametersView;
             _isHomeViewActive = false;

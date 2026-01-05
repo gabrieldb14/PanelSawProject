@@ -16,6 +16,7 @@ x86/
 [Oo]bj/
 [Ll]og/
 App.config
+users.json
 
 # Visual Studio cache/options
 .vscode/
@@ -66,3 +67,10 @@ $RECYCLE.BIN/
 # Backup files
 *.bak
 *~
+*.txt
+
+# User database (contains credentials)
+users.db
+users.db-journal
+*.db
+*.db-journal

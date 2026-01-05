@@ -1,3 +1,13 @@
+# [v0.61] - 01/05/2026
+
+## Added
+
+* Login Screen
+* Login Logic
+* User Model
+* SQLite Database
+* User info in Parameter View
+
 # [v0.6] - 12/26/2025
 
 ## Added

@@ -99,10 +99,13 @@ namespace HMI_PanelSaw.Service
         }
         public void Write(string variableName, object value)
         {
-            if (_handles.ContainsKey(variableName))
-            {
-                uint handle = _handles[variableName];
-                _adsClient.WriteAny(handle, value);
+            if(_adsClient.IsConnected){
+
+                if (_handles.ContainsKey(variableName))
+                {
+                    uint handle = _handles[variableName];
+                    _adsClient.WriteAny(handle, value);
+                }
             }
         }
         public bool IsConnected => _adsClient.IsConnected;
