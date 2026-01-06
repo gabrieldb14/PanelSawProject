@@ -97,7 +97,7 @@
         </Grid>
         <!--End of Left Side-->
         <!--Right Side-->
-        <Border Grid.Row="1" Grid.Column="1" BorderBrush="#555" BorderThickness="2" Background="#b6b6b6" Margin="10" CornerRadius="5">
+        <Border Grid.Row="1" Grid.Column="1" BorderBrush="#555" BorderThickness="2" Background="#b6b6b6" Margin="10,10,30,10" CornerRadius="5" Width="700" HorizontalAlignment="Right">
             <Grid Grid.Row="1" Grid.Column="1" Margin="10">
                 <Grid.RowDefinitions>
                     <RowDefinition/>
