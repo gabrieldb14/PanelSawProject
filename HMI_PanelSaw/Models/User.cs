@@ -18,10 +18,13 @@ namespace HMI_PanelSaw.Models
         public int Id { get; set; }
         public string Username { get; set; }
         public string PasswordHash { get; set; }
+        public string PasswordSalt { get; set; } 
         public UserRole Role { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? LastLoginAt { get; set; }
         public int FailedLoginAttempts { get; set; }
         public DateTime? LockedUntil { get; set; }
+        public bool ForcePasswordChange { get; set; } 
+        public DateTime? LastPasswordChange { get; set; }
     }
 }

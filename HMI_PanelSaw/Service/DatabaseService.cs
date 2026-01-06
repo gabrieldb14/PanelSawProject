@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data.SQLite;
 using System.IO;
+using static HMI_PanelSaw.Service.PasswordHashingService;
 
 namespace HMI_PanelSaw.Service
 {
@@ -30,8 +31,11 @@ namespace HMI_PanelSaw.Service
 
                 if (isNewDatabase)
                 {
+                    CreateUsersTable(connection);
+                    CreateUsernameIndex(connection);
                     SeedDefaultUsers(connection);
                 }
+
             }
         }
 
@@ -42,12 +46,15 @@ namespace HMI_PanelSaw.Service
                     Id INTEGER PRIMARY KEY AUTOINCREMENT,
                     Username TEXT NOT NULL UNIQUE COLLATE NOCASE,
                     PasswordHash TEXT NOT NULL,
+                    PasswordSalt TEXT,
                     Role INTEGER NOT NULL,
                     CreatedAt TEXT NOT NULL,
                     LastLoginAt TEXT,
                     IsActive INTEGER DEFAULT 1,
                     FailedLoginAttempts INTEGER DEFAULT 0,
-                    LockedUntil TEXT
+                    LockedUntil TEXT,
+                    ForcePasswordChange INTEGER DEFAULT 0,
+                    LastPasswordChange TEXT
                 );";
 
             using (var command = new SQLiteCommand(createTableQuery, connection))
@@ -72,14 +79,14 @@ namespace HMI_PanelSaw.Service
         {
             var defaultUsers = new[]
             {
-                new { Username = "operator", Password = "1234", Role = 0 },
-                new { Username = "supervisor", Password = "1234", Role = 1 },
-                new { Username = "admin", Password = "admin123", Role = 2 }
+                new { Username = "operator", Password = "Op123456", Role = 0 },
+                new { Username = "supervisor", Password = "Sup123456", Role = 1 },
+                new { Username = "admin", Password = "Admin123456", Role = 2 }
             };
 
             const string insertQuery = @"
-                INSERT INTO Users (Username, PasswordHash, Role, CreatedAt, IsActive)
-                VALUES (@Username, @PasswordHash, @Role, @CreatedAt, 1);";
+                INSERT INTO Users (Username, PasswordHash, Role, CreatedAt, IsActive, LastPasswordChange, ForcePasswordChange)
+                VALUES (@Username, @PasswordHash, @Role, @CreatedAt, 1, @LastPasswordChange, 1);";
 
             using (var transaction = connection.BeginTransaction())
             {
@@ -89,10 +96,13 @@ namespace HMI_PanelSaw.Service
                     {
                         using (var command = new SQLiteCommand(insertQuery, connection, transaction))
                         {
+                            var hashedPassword = PasswordHashingService.HashPassword(user.Password);
+
                             command.Parameters.AddWithValue("@Username", user.Username);
-                            command.Parameters.AddWithValue("@PasswordHash", HashPassword(user.Password));
+                            command.Parameters.AddWithValue("@PasswordHash", hashedPassword.ToStorageString());
                             command.Parameters.AddWithValue("@Role", user.Role);
                             command.Parameters.AddWithValue("@CreatedAt", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+                            command.Parameters.AddWithValue("@LastPasswordChange", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
                             command.ExecuteNonQuery();
                         }
                     }
@@ -121,14 +131,6 @@ namespace HMI_PanelSaw.Service
             return builder.DataSource;
         }
 
-        private string HashPassword(string password)
-        {
-            using (var sha256 = System.Security.Cryptography.SHA256.Create())
-            {
-                var hashedBytes = sha256.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
-                return Convert.ToBase64String(hashedBytes);
-            }
-        }
 
         private void ThrowIfDisposed()
         {

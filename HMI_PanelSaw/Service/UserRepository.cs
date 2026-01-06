@@ -16,9 +16,10 @@ namespace HMI_PanelSaw.Service
 
         public User GetByUsername(string username)
         {
-            string query = 
+            string query =
                 @"
-                SELECT Id, Username, PasswordHash, Role, CreatedAt,LastLoginAt, IsActive, FailedLoginAttempts, LockedUntil
+                SELECT Id, Username, PasswordHash, PasswordSalt, Role, CreatedAt, LastLoginAt, 
+                       IsActive, FailedLoginAttempts, LockedUntil, ForcePasswordChange, LastPasswordChange
                 FROM Users
                 WHERE Username = @Username COLLATE NOCASE AND IsActive = 1;
                 ";
@@ -42,8 +43,8 @@ namespace HMI_PanelSaw.Service
         {
             var users = new List<User>();
             string query = @"
-                SELECT Id, Username, PasswordHash, Role, CreatedAt, LastLoginAt, 
-                       IsActive, FailedLoginAttempts, LockedUntil
+                SELECT Id, Username, PasswordHash, PasswordSalt, Role, CreatedAt, LastLoginAt, 
+                       IsActive, FailedLoginAttempts, LockedUntil, ForcePasswordChange, LastPasswordChange
                 FROM Users 
                 WHERE IsActive = 1
                 ORDER BY Username;";
@@ -128,8 +129,8 @@ namespace HMI_PanelSaw.Service
         public void AddUser(User user)
         {
             string query = @"
-                INSERT INTO Users (Username, PasswordHash, Role, CreatedAt, IsActive)
-                VALUES (@Username, @PasswordHash, @Role, @CreatedAt, 1);";
+                INSERT INTO Users (Username, PasswordHash, Role, CreatedAt, IsActive, LastPasswordChange, ForcePasswordChange)
+                VALUES (@Username, @PasswordHash, @Role, @CreatedAt, 1, @LastPasswordChange, @ForcePasswordChange);";
 
             using (var connection = _database.GetConnection())
             using (var command = new SQLiteCommand(query, connection))
@@ -138,9 +139,12 @@ namespace HMI_PanelSaw.Service
                 command.Parameters.AddWithValue("@PasswordHash", user.PasswordHash);
                 command.Parameters.AddWithValue("@Role", (int)user.Role);
                 command.Parameters.AddWithValue("@CreatedAt", user.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss"));
+                command.Parameters.AddWithValue("@LastPasswordChange", user.LastPasswordChange?.ToString("yyyy-MM-dd HH:mm:ss") ?? (object)DBNull.Value);
+                command.Parameters.AddWithValue("@ForcePasswordChange", user.ForcePasswordChange ? 1 : 0);
                 command.ExecuteNonQuery();
             }
         }
+
 
         public void UpdatePassword(string username, string newPasswordHash)
         {
@@ -148,7 +152,9 @@ namespace HMI_PanelSaw.Service
                 UPDATE Users 
                 SET PasswordHash = @PasswordHash,
                     FailedLoginAttempts = 0,
-                    LockedUntil = NULL
+                    LockedUntil = NULL,
+                    LastPasswordChange = @LastPasswordChange,
+                    ForcePasswordChange = 0
                 WHERE Username = @Username;";
 
             using (var connection = _database.GetConnection())
@@ -156,6 +162,7 @@ namespace HMI_PanelSaw.Service
             {
                 command.Parameters.AddWithValue("@PasswordHash", newPasswordHash);
                 command.Parameters.AddWithValue("@Username", username);
+                command.Parameters.AddWithValue("@LastPasswordChange", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
                 command.ExecuteNonQuery();
             }
         }
@@ -176,6 +183,22 @@ namespace HMI_PanelSaw.Service
             }
         }
 
+        public void SetForcePasswordChange(string username, bool forceChange)
+        {
+            string query = @"
+                UPDATE Users 
+                SET ForcePasswordChange = @ForcePasswordChange
+                WHERE Username = @Username;";
+
+            using (var connection = _database.GetConnection())
+            using (var command = new SQLiteCommand(query, connection))
+            {
+                command.Parameters.AddWithValue("@Username", username);
+                command.Parameters.AddWithValue("@ForcePasswordChange", forceChange ? 1 : 0);
+                command.ExecuteNonQuery();
+            }
+        }
+
         private User MapReaderToUser(SQLiteDataReader reader)
         {
             return new User
@@ -183,11 +206,14 @@ namespace HMI_PanelSaw.Service
                 Id = Convert.ToInt32(reader["Id"]),
                 Username = reader["Username"].ToString(),
                 PasswordHash = reader["PasswordHash"].ToString(),
+                PasswordSalt = reader["PasswordSalt"] != DBNull.Value ? reader["PasswordSalt"].ToString() : null,
                 Role = (UserRole)Convert.ToInt32(reader["Role"]),
                 CreatedAt = DateTime.Parse(reader["CreatedAt"].ToString()),
                 LastLoginAt = reader["LastLoginAt"] != DBNull.Value ? DateTime.Parse(reader["LastLoginAt"].ToString()) : (DateTime?)null,
                 FailedLoginAttempts = Convert.ToInt32(reader["FailedLoginAttempts"]),
                 LockedUntil = reader["LockedUntil"] != DBNull.Value ? DateTime.Parse(reader["LockedUntil"].ToString()) : (DateTime?)null,
+                ForcePasswordChange = reader["ForcePasswordChange"] != DBNull.Value ? Convert.ToBoolean(reader["ForcePasswordChange"]) : false,
+                LastPasswordChange = reader["LastPasswordChange"] != DBNull.Value ? DateTime.Parse(reader["LastPasswordChange"].ToString()) : (DateTime?)null,
             };
         }
 

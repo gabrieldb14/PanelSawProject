@@ -3,6 +3,8 @@
 ## Added
 
 * Thread Safety
+* Replaced SHA256 with PBKDF2-SHA256
+* Unique salt for each password
 
 ## Fixed
 
