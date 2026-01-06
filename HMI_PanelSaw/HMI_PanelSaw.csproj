@@ -139,6 +139,7 @@
     <Compile Include="Service\AdsService.cs" />
     <Compile Include="Service\AuthService.cs" />
     <Compile Include="Service\DatabaseService.cs" />
+    <Compile Include="Service\PasswordHashingService.cs" />
     <Compile Include="Service\UserRepository.cs" />
     <Compile Include="Views\HomeView.xaml.cs">
       <DependentUpon>HomeView.xaml</DependentUpon>
