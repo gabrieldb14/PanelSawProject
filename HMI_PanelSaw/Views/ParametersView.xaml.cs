@@ -1,18 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using HMI_PanelSaw.Service;
 
 namespace HMI_PanelSaw.Views
@@ -21,7 +10,6 @@ namespace HMI_PanelSaw.Views
     public partial class ParametersView : UserControl
     {
         private AdsService _adsService;
-        private AuthService _authService;
         private const float MIN_PANEL_DIMENSION = 10f;     
         private const float MAX_PANEL_DIMENSION = 5000f;    
         private const float MIN_BLADE_DIAMETER = 100f;      
@@ -29,13 +17,11 @@ namespace HMI_PanelSaw.Views
         private const float MIN_BLADE_THICKNESS = 1f;       
         private const float MAX_BLADE_THICKNESS = 10f;      
 
-        public ParametersView(AdsService adsService, AuthService authService)
+        public ParametersView(AdsService adsService)
         {
             InitializeComponent();
             _adsService = adsService;
-            _authService = authService;
             InitializeParameterHandles();
-            LoadUserParameters();
             LoadParametersFromPLC();
         }
         private void InitializeParameterHandles()
@@ -76,15 +62,6 @@ namespace HMI_PanelSaw.Views
             {
                 MessageBox.Show($"Error loading parameters from PLC {ex.Message}", "Loading error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-        }
-
-        private void LoadUserParameters()
-        {
-            txtUserId.Text = $"Id: {_authService.CurrentUser.Id}";
-            txtUserUsername.Text = $"Username: {_authService.CurrentUser.Username}";
-            txtUserRole.Text = $"Role : {_authService.CurrentUser.Role}";
-            txtUserCreatedAt.Text = $"Created At: {_authService.CurrentUser.CreatedAt}";
-            txtUserLastLogin.Text = $"Last Login At: {_authService.CurrentUser.LastLoginAt}";
         }
 
         private bool TryParseAndValidate(string input, string parameterName, float min, float max, out float result)

@@ -1,0 +1,44 @@
+﻿<Window x:Class="HMI_PanelSaw.Views.AddUserDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Add New User" Height="482" Width="554" 
+        WindowStartupLocation="CenterOwner" ResizeMode="NoResize" 
+        Background="#FF9F9F9F" KeyDown="Window_KeyDown">
+
+    <StackPanel Margin="20" VerticalAlignment="Center">
+        <TextBlock Text="Add New User" FontSize="24" FontWeight="Bold" 
+                   Foreground="#333" HorizontalAlignment="Center" Margin="0,0,0,20"/>
+
+        <StackPanel Margin="0,0,0,15">
+            <TextBlock Text="Username:" FontSize="16" Foreground="#333"/>
+            <TextBox x:Name="txtUsername" Height="30" FontSize="14" 
+                     ToolTip="Enter username (minimum 3 characters)"/>
+        </StackPanel>
+
+        <StackPanel Margin="0,0,0,15">
+            <TextBlock Text="Password:" FontSize="16" Foreground="#333"/>
+            <PasswordBox x:Name="txtPassword" Height="30" FontSize="14"
+                         ToolTip="Password must be at least 6 characters with letters and numbers"/>
+        </StackPanel>
+
+        <StackPanel Margin="0,0,0,15">
+            <TextBlock Text="Confirm Password:" FontSize="16" Foreground="#333"/>
+            <PasswordBox x:Name="txtConfirmPassword" Height="30" FontSize="14"/>
+        </StackPanel>
+
+        <StackPanel Margin="0,0,0,15">
+            <TextBlock Text="Role:" FontSize="16" Foreground="#333"/>
+            <ComboBox x:Name="cmbRole" Height="30" FontSize="14"/>
+        </StackPanel>
+
+        <TextBlock x:Name="lblError" Foreground="Red" TextWrapping="Wrap" 
+                   Margin="0,0,0,15" MinHeight="40"/>
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button x:Name="btnCreate" Content="Create User" Width="120" Height="35" 
+                    Margin="0,0,10,0" Click="BtnCreate_Click" FontSize="14"/>
+            <Button x:Name="btnCancel" Content="Cancel" Width="80" Height="35" 
+                    Click="BtnCancel_Click" FontSize="14"/>
+        </StackPanel>
+    </StackPanel>
+</Window>

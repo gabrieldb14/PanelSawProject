@@ -1,0 +1,41 @@
+﻿<Window x:Class="HMI_PanelSaw.Views.EditUserDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Edit User" Height="469" Width="619" 
+        WindowStartupLocation="CenterOwner" ResizeMode="NoResize" 
+        Background="#FF9F9F9F" KeyDown="Window_KeyDown">
+
+    <StackPanel Margin="20" VerticalAlignment="Center">
+        <TextBlock Text="Edit User" FontSize="24" FontWeight="Bold" 
+                   Foreground="#333" HorizontalAlignment="Center" Margin="0,0,0,20"/>
+
+        <StackPanel Margin="0,0,0,15">
+            <TextBlock Text="Username:" FontSize="16" Foreground="#333"/>
+            <TextBox x:Name="txtUsername" Height="30" FontSize="14" 
+                     IsReadOnly="True" Background="LightGray"
+                     ToolTip="Username cannot be changed"/>
+        </StackPanel>
+
+        <StackPanel Margin="0,0,0,15">
+            <TextBlock Text="Role:" FontSize="16" Foreground="#333"/>
+            <ComboBox x:Name="cmbRole" Height="30" FontSize="14"
+                      ToolTip="Select user role"/>
+        </StackPanel>
+
+        <StackPanel Margin="0,0,0,15">
+            <CheckBox x:Name="chkForcePasswordChange" Content="Force Password Change on Next Login" 
+                      FontSize="14" Foreground="#333"
+                      ToolTip="User will be required to change password on next login"/>
+        </StackPanel>
+
+        <TextBlock x:Name="lblError" Foreground="Red" TextWrapping="Wrap" 
+                   Margin="0,0,0,15" MinHeight="40"/>
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button x:Name="btnSave" Content="Save Changes" Width="120" Height="35" 
+                    Margin="0,0,10,0" Click="BtnSave_Click" FontSize="14"/>
+            <Button x:Name="btnCancel" Content="Cancel" Width="80" Height="35" 
+                    Click="BtnCancel_Click" FontSize="14"/>
+        </StackPanel>
+    </StackPanel>
+</Window>

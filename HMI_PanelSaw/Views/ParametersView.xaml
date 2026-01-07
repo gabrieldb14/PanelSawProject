@@ -97,32 +97,6 @@
         </Grid>
         <!--End of Left Side-->
         <!--Right Side-->
-        <Border Grid.Row="1" Grid.Column="1" BorderBrush="#555" BorderThickness="2" Background="#b6b6b6" Margin="10,10,30,10" CornerRadius="5" Width="700" HorizontalAlignment="Right">
-            <Grid Grid.Row="1" Grid.Column="1" Margin="10">
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
-                
-                <TextBlock Grid.Row="0" Grid.Column="0" x:Name="txtUserId" Text="Id: " FontSize="20" Foreground="#333" VerticalAlignment="Center"/>
-                <TextBlock Grid.Row="1" Grid.Column="0" x:Name="txtUserUsername" Text="Username: " FontSize="20" Foreground="#333" VerticalAlignment="Center"/>
-                <TextBlock Grid.Row="2" Grid.Column="0" x:Name="txtUserRole" Text="Role: " FontSize="20" Foreground="#333" VerticalAlignment="Center"/>
-                <TextBlock Grid.Row="3" Grid.Column="0"  x:Name="txtUserCreatedAt"  Text="Created At: " FontSize="20" Foreground="#333" VerticalAlignment="Center"/>
-                <TextBlock Grid.Row="4" Grid.Column="0" x:Name="txtUserLastLogin" Text="Last Login At: " FontSize="20" Foreground="#333" VerticalAlignment="Center"/>
-                    <Border Grid.Column="1" Grid.Row="0" Grid.RowSpan="4" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,20,20,0" BorderBrush="#555" BorderThickness="3" Background="#b6b6b6" CornerRadius="10">
-                        <StackPanel Background="#FF9F9F9F">
-                            <Image Source="/Media/Avatar.png" HorizontalAlignment="Right" Margin="10" Stretch="None"/>
-                        </StackPanel>
-                    </Border>
-            </Grid>
-        </Border>
         <StackPanel Grid.Column="1" Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right" 
                  VerticalAlignment="Bottom" Margin="0,0,30,30">
             <Button x:Name="btnLoadParameters" Content="LOAD FROM PLC" 
@@ -135,7 +109,6 @@
                  Click="BtnSaveParameters_Click"/>
         </StackPanel>
         <!--End of Right Side-->
-        <TextBlock Grid.Row="0" Grid.Column="1" Text="User Info" FontSize="32" FontWeight="Bold" Foreground="#333" Margin="0 15 30 0" HorizontalAlignment="Right"/>
 
     </Grid>
         

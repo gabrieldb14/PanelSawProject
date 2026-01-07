@@ -1,4 +1,5 @@
-﻿using HMI_PanelSaw.Service;
+﻿using HMI_PanelSaw.Models;
+using HMI_PanelSaw.Service;
 using HMI_PanelSaw.Views;
 using System;
 using System.Configuration;
@@ -6,7 +7,6 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
-using TwinCAT.Ads;
 
 namespace HMI_PanelSaw
 {
@@ -19,8 +19,10 @@ namespace HMI_PanelSaw
 
         private HomeView _homeView;
         private ParametersView _parametersView;
+        private SettingsView _settingsView;
         private bool _isHomeViewActive;
         private bool _isParametersViewActive;
+        private bool _isSettingsViewActive;
         private bool _isInitialized = false;
 
         private static readonly System.Windows.Media.SolidColorBrush ActiveBrush = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(100, 181, 246));
@@ -29,12 +31,20 @@ namespace HMI_PanelSaw
 
         public MainWindow(AuthService authService)
         {
+
             try
             {
                 InitializeComponent();
                 _authService = authService;
                 InitComms();
                 InitializeTimer();
+                if (_authService.CurrentUser.Role != UserRole.Administrator)
+                {
+
+                    btnSettings.Visibility = Visibility.Collapsed;
+                    btnMinimizeWindow.Visibility = Visibility.Collapsed;
+                    btnCloseWindow.Visibility = Visibility.Collapsed;
+                }
                 NavigateToHome();
                 _isInitialized = true;
             }
@@ -178,16 +188,28 @@ namespace HMI_PanelSaw
                 _homeView = new HomeView(_adsClient);
             ContentArea.Content = _homeView;
             _isParametersViewActive = false;
+            _isSettingsViewActive = false;
             _isHomeViewActive = true;
         }
         private void NavigateToParameters()
         {
             if (_parametersView == null)
-                _parametersView = new ParametersView(_adsClient, _authService);
+                _parametersView = new ParametersView(_adsClient);
 
             ContentArea.Content = _parametersView;
             _isHomeViewActive = false;
+            _isSettingsViewActive = false;
             _isParametersViewActive = true;
+        }
+        private void NavigateToSettings()
+        {
+            if (_settingsView == null)
+                _settingsView = new SettingsView(_authService);
+
+            ContentArea.Content = _settingsView;
+            _isHomeViewActive = false;
+            _isParametersViewActive = false;
+            _isSettingsViewActive = true;
         }
         
         private void BtnStartCycle_Click(object sender, RoutedEventArgs e)
@@ -221,6 +243,7 @@ namespace HMI_PanelSaw
                     MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
+
         private async void BtnEmergencyReset_Click(object sender, RoutedEventArgs e)
         {
             if (!_isInitialized || _adsClient?.IsConnected != true) return;
@@ -264,6 +287,11 @@ namespace HMI_PanelSaw
         {
             NavigateToParameters();
         }
+        private void BtnSettings_Click(object sender, RoutedEventArgs e)
+        {
+            NavigateToSettings();
+        }
+
         private void BtnAirTable_Click(object sender, RoutedEventArgs e)
         {
             if (!_isInitialized || _adsClient?.IsConnected != true) return;
@@ -319,6 +347,12 @@ namespace HMI_PanelSaw
             }
 
         }
+
+        private void BtnLogout_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
+
         private void BtnCloseWindow_Click(object sender, RoutedEventArgs e)
         {
             this.Close();

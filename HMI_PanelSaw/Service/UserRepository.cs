@@ -166,6 +166,21 @@ namespace HMI_PanelSaw.Service
                 command.ExecuteNonQuery();
             }
         }
+        public void UpdateUserRole(string username, UserRole newRole)
+        {
+            string query = @"
+        UPDATE Users 
+        SET Role = @Role
+        WHERE Username = @Username;";
+
+            using (var connection = _database.GetConnection())
+            using (var command = new SQLiteCommand(query, connection))
+            {
+                command.Parameters.AddWithValue("@Role", (int)newRole);
+                command.Parameters.AddWithValue("@Username", username);
+                command.ExecuteNonQuery();
+            }
+        }
 
         public void DeleteUser(string username)
         {
