@@ -46,6 +46,7 @@ namespace HMI_PanelSaw.Views
 
                 var newRole = (UserRole)cmbRole.SelectedItem;
                 var forcePasswordChange = chkForcePasswordChange.IsChecked == true;
+                bool hasChanges = false;
 
                 // Update user properties through UserRepository
                 using (var userRepository = new UserRepository())
@@ -55,12 +56,41 @@ namespace HMI_PanelSaw.Views
                     {
                         userRepository.UpdateUserRole(_user.Username, newRole);
                     }
-
+                    if (!string.IsNullOrEmpty(txtNewPassword.Password)) 
+                    {
+                        if(_authService.AdminResetPassword(_user.Username, txtNewPassword.Password, out string passwordError)){
+                            hasChanges = true;
+                            forcePasswordChange = true;
+                        }
+                        else
+                        {
+                            lblError.Text = passwordError;
+                            return;
+                        }
+                    }
                     // Update force password change if changed
                     if (forcePasswordChange != _user.ForcePasswordChange)
                     {
                         userRepository.SetForcePasswordChange(_user.Username, forcePasswordChange);
+                        hasChanges = true;
                     }
+                }
+                if (hasChanges)
+                {
+                    string message = "User updated successfully.";
+                    if (!string.IsNullOrWhiteSpace(txtNewPassword.Password))
+                    {
+                        message += " The user will be required to change their password on next login.";
+                    }
+
+                    MessageBox.Show(message, "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                    DialogResult = true;
+                    Close();
+                }
+                else
+                {
+                    MessageBox.Show("No changes were made.", "Information",
+                        MessageBoxButton.OK, MessageBoxImage.Information);
                 }
 
                 MessageBox.Show("User updated successfully.", "Success",

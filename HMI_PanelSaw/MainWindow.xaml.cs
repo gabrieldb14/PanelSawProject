@@ -53,17 +53,6 @@ namespace HMI_PanelSaw
                 MessageBox.Show($"Failed to Initialize application: {ex.Message}","Initialization Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 _isInitialized = false;
             }
-            /*
-            InitComms();
-            InitializeComponent();
-            _authService = authService;
-            int pollingInterval = GetConfigValue("PlcPollingInterval", 100);
-            _timerCommunication = new DispatcherTimer();
-            _timerCommunication.Interval = TimeSpan.FromMilliseconds(pollingInterval);
-            _timerCommunication.Tick += PLCReadCycle;
-            _timerCommunication.Start();
-            NavigateToHome();
-            */
 
         }
         private void InitComms()

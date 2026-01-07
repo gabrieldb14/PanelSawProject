@@ -1,10 +1,12 @@
-# [v0.62] - 01/05/2026
+# [v0.62] - 01/07/2026
 
 ## Added
 
 * Thread Safety
 * Replaced SHA256 with PBKDF2-SHA256
 * Unique salt for each password
+* Collapsable Admin buttons
+* Admins can now update passwords
 
 ## Fixed
 
@@ -12,6 +14,9 @@
 * Deprecated API Usage
 * Improved error handling
 
+## Removed
+
+* Old code for authentication
 
 # [v0.61] - 01/05/2026
 

@@ -20,12 +20,13 @@ namespace HMI_PanelSaw.Service
         {
             _userRepository = new UserRepository();
         }
-        
+        //Login method
         public bool Login(string username, string password)
         {
             if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
                 return false;
 
+            //Check if account is Locked up
             if (_userRepository.IsAccountLocked(username))
             {
                 throw new InvalidOperationException(
@@ -41,8 +42,7 @@ namespace HMI_PanelSaw.Service
             }
 
             bool passwordValid = VerifyPassword(password, user.PasswordHash);
-
-            if (!passwordValid)
+            if (!passwordValid) //If password is wrong, increments FailedLoginAttempts in database
             {
                 _userRepository.IncrementFailedLoginAttempts(username, MAX_LOGIN_ATTEMPTS, LOCKOUT_DURATION_MINUTES);
                 return false;
@@ -58,6 +58,7 @@ namespace HMI_PanelSaw.Service
             CurrentUser = user;
             _userRepository.UpdateLastLogin(username);
 
+            //Check if user has to change password to login
             if (user.ForcePasswordChange)
             {
                 PasswordChangeRequired?.Invoke(this, "You must change your password before continuing.");
@@ -74,6 +75,7 @@ namespace HMI_PanelSaw.Service
         public bool CanEditParameters() => CurrentUser?.Role >= UserRole.Supervisor;
         public bool CanAccessAdmin() => CurrentUser?.Role >= UserRole.Administrator;
 
+        //Change password method
         public bool ChangePassword(string username, string oldPassword, string newPassword, out string errorMessage)
         {
             errorMessage = null;
@@ -114,6 +116,7 @@ namespace HMI_PanelSaw.Service
             return ChangePassword(username, oldPassword, newPassword, out _);
         }
 
+        // Add new user method
         public bool AddUser(string username, string password, UserRole role, out string errorMessage)
         {
             errorMessage = null;
@@ -125,7 +128,7 @@ namespace HMI_PanelSaw.Service
             }
 
             var validationResult = PasswordHashingService.ValidatePassword(password);
-            if (!validationResult.IsValid)
+            if (!validationResult.IsValid) // Check if password is in the right format and size
             {
                 errorMessage = validationResult.ErrorMessage;
                 return false;
@@ -139,7 +142,7 @@ namespace HMI_PanelSaw.Service
 
             try
             {
-                var newUser = new User
+                var newUser = new User 
                 {
                     Username = username,
                     PasswordHash = PasswordHashingService.HashPassword(password).ToStorageString(),
@@ -158,6 +161,50 @@ namespace HMI_PanelSaw.Service
                 return false;
             }
         }
+        
+        //Admin force reset password method
+        public bool AdminResetPassword(string username, string newPassword, out string errorMessage)
+        {
+            errorMessage = null;
+
+            if(CurrentUser?.Role != UserRole.Administrator) //Double check for user(admin) role
+            {
+                errorMessage = "Only administrators can reset user passwords";
+                return false;
+            }
+           
+            var validationResult = PasswordHashingService.ValidatePassword(newPassword);
+            if (!validationResult.IsValid)
+            {
+                errorMessage = validationResult.ErrorMessage;
+                return false;
+            }
+
+            var user = _userRepository.GetByUsername(username);
+            if (user == null)
+            {
+                errorMessage = "User not found.";
+                return false;
+            }
+            try
+            {
+                string newPasswordHash = PasswordHashingService.HashPassword(newPassword).ToStorageString();
+
+                _userRepository.UpdatePassword(username, newPasswordHash);
+                
+                return true;
+            }
+            catch (Exception ex)
+            {
+                errorMessage = $"Failed to reset password: {ex.Message}";
+                return false;
+            }
+        }
+        public bool AdminResetPassword(string username, string newPassword)
+        {
+            return AdminResetPassword(username, newPassword, out _);
+        }
+
         public void AddUser(string username, string password, UserRole role)
         {
             if (!AddUser(username, password, role, out string errorMessage))
@@ -195,7 +242,6 @@ namespace HMI_PanelSaw.Service
                 return computedHash == legacyHash;
             }
         }
-
         public void Dispose()
         {
             _userRepository?.Dispose();

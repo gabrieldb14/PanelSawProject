@@ -15,6 +15,10 @@
                      IsReadOnly="True" Background="LightGray"
                      ToolTip="Username cannot be changed"/>
         </StackPanel>
+        <StackPanel Margin="0,0,0,15">
+            <TextBlock Text="New Password:" FontSize="16" Foreground="#333"/>
+            <PasswordBox x:Name="txtNewPassword" Height="30" FontSize="14"/>
+        </StackPanel>
 
         <StackPanel Margin="0,0,0,15">
             <TextBlock Text="Role:" FontSize="16" Foreground="#333"/>
